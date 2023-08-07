@@ -1,91 +1,68 @@
+#include <check.h>
+#include <string.h>
+
 #include "../s21_test.h"
+
 START_TEST(test1_strncpy) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "strncpy";
-  size_t n = strlen(str);
-  ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
+  char dest[20] = "Hello, ";
+  const char *src = "world!";
+  size_t n = strlen(src);
+  ck_assert_str_eq(strncpy(dest, src, n), s21_strncpy(dest, src, n));
 }
-END_TEST
 
 START_TEST(test2_strncpy) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "\0";
-  size_t n = strlen(str);
-  ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
+  char dest[20] = "Hello, world!";
+  const char *src = "Good";
+  size_t n = strlen(src);
+  ck_assert_pstr_eq(strncpy(dest, src, n), s21_strncpy(dest, src, n));
 }
 END_TEST
 
 START_TEST(test3_strncpy) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "strncpy";
-  size_t n = 0;
-  ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
+  char dest[20] = "Hello, world!";
+  const char *src = "\0";
+  size_t n = strlen(src);
+  ck_assert_pstr_eq(strncpy(dest, src, n), s21_strncpy(dest, src, n));
 }
 END_TEST
 
 START_TEST(test4_strncpy) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "strncpy";
+  char dest[30] = "Hello, world!";
+  const char *src = "test";
   size_t n = 1;
-  ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
+  ck_assert_pstr_eq(strncpy(dest, src, n), s21_strncpy(dest, src, n));
 }
 END_TEST
 
 START_TEST(test5_strncpy) {
-  char str1[] = "";
-  char str2[] = "";
-  char str[] = "";
-  size_t n = strlen(str);
-  ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
+  char dest[10] = "";
+  const char *src = "";
+  size_t n = 0;
+  ck_assert_pstr_eq(strncpy(dest, src, n), s21_strncpy(dest, src, n));
 }
 END_TEST
 
 START_TEST(test6_strncpy) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "Hello, world!";
-  size_t n = strlen(str);
-  ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
+  char dest[10] = "";
+  const char *src = "\0";
+  size_t n = 0;
+  ck_assert_pstr_eq(strncpy(dest, src, n), s21_strncpy(dest, src, n));
 }
 END_TEST
 
 START_TEST(test7_strncpy) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "Hello, world!";
-  size_t n = 0;
-  ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
+  char dest[20] = "";
+  const char *src = "big long word";
+  size_t n = strlen(src);
+  ck_assert_pstr_eq(strncpy(dest, src, n), s21_strncpy(dest, src, n));
 }
 END_TEST
 
 START_TEST(test8_strncpy) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "\n\0\t";
-  size_t n = strlen(str);
-  ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
-}
-END_TEST
-
-START_TEST(test9_strncpy) {
-  char str1[] = "Hello, world";
-  char str2[] = "Hello, world";
-  char str[] = "!";
-  size_t n = 1;
-  ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
-}
-END_TEST
-
-START_TEST(test10_strncpy) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "!!";
-  size_t n = 2;
-  ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
+  char *dest = NULL;
+  const char *src = "big long word";
+  size_t n = strlen(src);
+  ck_assert_ptr_eq(NULL, s21_strncpy(dest, src, n));
 }
 END_TEST
 
@@ -101,8 +78,6 @@ Suite *test_strncpy() {
   tcase_add_test(tcase, test6_strncpy);
   tcase_add_test(tcase, test7_strncpy);
   tcase_add_test(tcase, test8_strncpy);
-  tcase_add_test(tcase, test9_strncpy);
-  tcase_add_test(tcase, test10_strncpy);
 
   suite_add_tcase(suite, tcase);
   return suite;

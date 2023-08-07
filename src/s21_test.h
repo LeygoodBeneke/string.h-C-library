@@ -6,8 +6,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "s21_sprintf.h"
+#include "s21_string.h"
 
+// PART 1
 Suite *test_memchr();
 Suite *test_memcmp();
 Suite *test_memcpy();
@@ -24,16 +25,15 @@ Suite *test_strrchr();
 Suite *test_strstr();
 Suite *test_strtok();
 
-Suite *test_to_lower();
-Suite *test_to_upper();
+// PART 2 + BONUS PART 4
+Suite *test_sprintf();
+
+// BONUS PART 3
+Suite *test_sscanf();
+
+// BONUS PART 5
 Suite *test_insert();
+Suite *test_to_upper();
+Suite *test_to_lower();
 Suite *test_trim();
-
-Suite *test_sprintf_c();
-Suite *test_sprintf_d();
-Suite *test_sprintf_f();
-Suite *test_sprintf_s();
-Suite *test_sprintf_u();
-Suite *test_sprintf_percent();
-
-#endif  // SRC_S21_TEST_H
+#endif

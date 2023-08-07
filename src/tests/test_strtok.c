@@ -1,99 +1,147 @@
+#include <check.h>
+#include <string.h>
+
 #include "../s21_test.h"
 
-START_TEST(test1_strtok) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "\0";
-  ck_assert_pstr_eq(s21_strtok(str1, str), strtok(str2, str));
+START_TEST(test_strtok_1) {
+  char str1[] = "Never gonna give you up!";
+  char str2[] = "Never gonna give you up!";
+  char del[] = "!";
+  ck_assert_pstr_eq(strtok(str1, del), s21_strtok(str2, del));
 }
 END_TEST
 
-START_TEST(test2_strtok) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "";
-  ck_assert_pstr_eq(s21_strtok(str1, str), strtok(str2, str));
+START_TEST(test_strtok_2) {
+  char str1[] = "";
+  char str2[] = "";
+  char del[] = "";
+  ck_assert_pstr_eq(strtok(str1, del), s21_strtok(str2, del));
 }
 END_TEST
 
-START_TEST(test3_strtok) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = " ";
-  ck_assert_pstr_eq(s21_strtok(str1, str), strtok(str2, str));
+START_TEST(test_strtok_3) {
+  char str1[] = "Never gonna give you up!";
+  char str2[] = "Never gonna give you up!";
+  char del[] = "\0";
+  ck_assert_pstr_eq(strtok(str1, del), s21_strtok(str2, del));
 }
 END_TEST
 
-START_TEST(test4_strtok) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "l";
-  ck_assert_pstr_eq(s21_strtok(str1, str), strtok(str2, str));
+START_TEST(test_strtok_4) {
+  char str1[] = "Never gonna give you up!";
+  char str2[] = "Never gonna give you up!";
+  char del[] = "";
+  ck_assert_pstr_eq(strtok(str1, del), s21_strtok(str2, del));
 }
 END_TEST
 
-START_TEST(test5_strtok) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "H";
-  ck_assert_pstr_eq(s21_strtok(str1, str), strtok(str2, str));
+START_TEST(test_strtok_5) {
+  char str1[] = "Never gonna give you up!";
+  char str2[] = "Never gonna give you up!";
+  char del[] = "Never gonna give you up!";
+  ck_assert_pstr_eq(strtok(str1, del), s21_strtok(str2, del));
 }
 END_TEST
 
-START_TEST(test6_strtok) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "!";
-  ck_assert_pstr_eq(s21_strtok(str1, str), strtok(str2, str));
+START_TEST(test_strtok_6) {
+  char str1[] = "Never gonna give you up!";
+  char str2[] = "Never gonna give you up!";
+  char del[] = "We've known each other for so long";
+  ck_assert_pstr_eq(strtok(str1, del), s21_strtok(str2, del));
 }
 END_TEST
 
-START_TEST(test7_strtok) {
-  char str1[] = "Hello, world!Hello, world!";
-  char str2[] = "Hello, world!Hello, world!";
-  char str[] = "l";
-  ck_assert_pstr_eq(s21_strtok(str1, str), strtok(str2, str));
+START_TEST(test_strtok_7) {
+  char str1[] = "ABABABABABBABABABBABABABABABBA";
+  char str2[] = "ABABABABABBABABABBABABABABABBA";
+  char del[] = "B";
+  ck_assert_pstr_eq(strtok(str1, del), s21_strtok(str2, del));
 }
 END_TEST
 
-START_TEST(test8_strtok) {
-  char str1[] = "Hello, world!Hello, world!";
-  char str2[] = "Hello, world!Hello, world!";
-  char str[] = "h";
-  ck_assert_pstr_eq(s21_strtok(str1, str), strtok(str2, str));
+START_TEST(test_strtok_8) {
+  char str1[] = "\0ABABABABABBABABABBABABABABABBA";
+  char str2[] = "\0ABABABABABBABABABBABABABABABBA";
+  char del[] = "A";
+  ck_assert_pstr_eq(strtok(str1, del), s21_strtok(str2, del));
 }
 END_TEST
 
-START_TEST(test9_strtok) {
-  char str1[] = "Hello, world! Hello, world!";
-  char str2[] = "Hello, world! Hello, world!";
-  char str[] = "ll";
-  ck_assert_pstr_eq(s21_strtok(str1, str), strtok(str2, str));
+START_TEST(test_strtok_9) {
+  char str1[] = "\0Never gonna give you up!";
+  char str2[] = "\0Never gonna give you up!";
+  char del[] = "\0";
+  ck_assert_pstr_eq(strtok(str1, del), s21_strtok(str2, del));
 }
 END_TEST
 
-START_TEST(test10_strtok) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  char str[] = "ll";
-  ck_assert_pstr_eq(s21_strtok(str1, str), strtok(str2, str));
+START_TEST(test_strtok_10) {
+  char str1[] = "\0Never gonna give you up!";
+  char str2[] = "\0Never gonna give you up!";
+  char del[] = "";
+  ck_assert_pstr_eq(strtok(str1, del), s21_strtok(str2, del));
+}
+END_TEST
+
+START_TEST(test_strtok_11) {
+  char *str1 = NULL;
+  char *str2 = NULL;
+  char del[] = "";
+  ck_assert_pstr_eq(strtok(str1, del), s21_strtok(str2, del));
+}
+END_TEST
+
+START_TEST(test_strtok_12) {
+  char str1[] = "Never gonna give you up! And other people";
+  char str2[] = "Never gonna give you up! And other people";
+  char str3[] = "\0We know the game";
+  char str4[] = "\0We know the game";
+  char del[] = "";
+
+  ck_assert_pstr_eq(strtok(str1, del), s21_strtok(str2, del));
+  for (int i = 0; i < 5; i++) {
+    ck_assert_pstr_eq(strtok(NULL, del), s21_strtok(NULL, del));
+  }
+  ck_assert_pstr_eq(strtok(str3, del), s21_strtok(str4, del));
+  ck_assert_pstr_eq(strtok(NULL, del), s21_strtok(NULL, del));
+  ck_assert_pstr_eq(strtok(NULL, del), s21_strtok(NULL, del));
+}
+END_TEST
+
+START_TEST(test_strtok_13) {
+  char str1[] = "Never      gonna run around and desert you";
+  char str2[] = "Never      gonna run around and desert you";
+  char str3[] = "Never gonna say goodbye";
+  char str4[] = "Never gonna say goodbye";
+  char del[] = " g";
+
+  ck_assert_pstr_eq(strtok(str1, del), s21_strtok(str2, del));
+  for (int i = 0; i < 5; i++) {
+    ck_assert_pstr_eq(strtok(NULL, del), s21_strtok(NULL, del));
+  }
+  ck_assert_pstr_eq(strtok(str3, del), s21_strtok(str4, del));
+  ck_assert_pstr_eq(strtok(NULL, del), s21_strtok(NULL, del));
+  ck_assert_pstr_eq(strtok(NULL, del), s21_strtok(NULL, del));
 }
 END_TEST
 
 Suite *test_strtok() {
   Suite *suite = suite_create("strtok");
-  TCase *tcase = tcase_create("strtok_tcase");
+  TCase *tcase = tcase_create("test_strtok_tcase");
 
-  tcase_add_test(tcase, test1_strtok);
-  tcase_add_test(tcase, test2_strtok);
-  tcase_add_test(tcase, test3_strtok);
-  tcase_add_test(tcase, test4_strtok);
-  tcase_add_test(tcase, test5_strtok);
-  tcase_add_test(tcase, test6_strtok);
-  tcase_add_test(tcase, test7_strtok);
-  tcase_add_test(tcase, test8_strtok);
-  tcase_add_test(tcase, test9_strtok);
-  tcase_add_test(tcase, test10_strtok);
+  tcase_add_test(tcase, test_strtok_1);
+  tcase_add_test(tcase, test_strtok_2);
+  tcase_add_test(tcase, test_strtok_3);
+  tcase_add_test(tcase, test_strtok_4);
+  tcase_add_test(tcase, test_strtok_5);
+  tcase_add_test(tcase, test_strtok_6);
+  tcase_add_test(tcase, test_strtok_7);
+  tcase_add_test(tcase, test_strtok_8);
+  tcase_add_test(tcase, test_strtok_9);
+  tcase_add_test(tcase, test_strtok_10);
+  tcase_add_test(tcase, test_strtok_11);
+  tcase_add_test(tcase, test_strtok_12);
+  tcase_add_test(tcase, test_strtok_13);
 
   suite_add_tcase(suite, tcase);
   return suite;

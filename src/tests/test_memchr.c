@@ -1,99 +1,109 @@
+#include <check.h>
+#include <string.h>
+
 #include "../s21_test.h"
 
-START_TEST(test1_memchr) {
-  char str[] = "Hello, world!";
-  size_t n = strlen(str);
-  int c = 'a';
-  ck_assert_ptr_eq(s21_memchr(str, c, n), memchr(str, c, n));
+START_TEST(test_memchr_1) {
+  char str[] = "Never gonna give you up";
+  int ch = ' ';
+  size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
 }
 END_TEST
 
-START_TEST(test2_memchr) {
-  char str[] = "Hello, world!";
-  size_t n = 0;
-  int c = 'l';
-  ck_assert_ptr_eq(s21_memchr(str, c, n), memchr(str, c, n));
+START_TEST(test_memchr_2) {
+  char str[] = "Never gonna give you up";
+  int ch = '5';
+  size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
 }
 END_TEST
 
-START_TEST(test3_memchr) {
-  char str[] = "Hello, world!";
-  size_t n = 1;
-  int c = 'l';
-  ck_assert_ptr_eq(s21_memchr(str, c, n), memchr(str, c, n));
+START_TEST(test_memchr_3) {
+  char str[] = "Never gonna give you up";
+  int ch = 'c';
+  size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
 }
 END_TEST
 
-START_TEST(test4_memchr) {
-  char str[] = "Hello, world!";
-  size_t n = 2;
-  int c = 'l';
-  ck_assert_ptr_eq(s21_memchr(str, c, n), memchr(str, c, n));
+START_TEST(test_memchr_4) {
+  char str[] = "Never gonna give you up";
+  int ch = 'N';
+  size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
 }
 END_TEST
 
-START_TEST(test5_memchr) {
-  char str[] = "Hello, world!";
-  size_t n = 3;
-  int c = 'l';
-  ck_assert_ptr_eq(s21_memchr(str, c, n), memchr(str, c, n));
+START_TEST(test_memchr_5) {
+  char str[] = "Never gonna give you up";
+  int ch = 'y';
+  size_t len = 17;
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
 }
 END_TEST
 
-START_TEST(test6_memchr) {
-  char str[] = "Hello, world!";
-  size_t n = strlen(str);
-  int c = '!';
-  ck_assert_ptr_eq(s21_memchr(str, c, n), memchr(str, c, n));
+START_TEST(test_memchr_6) {
+  char str[] = "Never gonna give you up";
+  int ch = 'g';
+  size_t len = -5;
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
 }
 END_TEST
 
-START_TEST(test7_memchr) {
-  char str[] = "Hello, world!";
-  size_t n = strlen(str);
-  int c = 'h';
-  ck_assert_ptr_eq(s21_memchr(str, c, n), memchr(str, c, n));
+START_TEST(test_memchr_7) {
+  char str[] = "435785675";
+  int ch = '0';
+  size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
 }
 END_TEST
 
-START_TEST(test8_memchr) {
-  char str[] = "Hello, world!";
-  size_t n = strlen(str);
-  int c = 'H';
-  ck_assert_ptr_eq(s21_memchr(str, c, n), memchr(str, c, n));
+START_TEST(test_memchr_8) {
+  char str[] = "435785675";
+  int ch = '4';
+  size_t len = 0;
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
 }
 END_TEST
 
-START_TEST(test9_memchr) {
-  char str[] = "Hello, world!";
-  size_t n = strlen(str);
-  int c = '\0';
-  ck_assert_ptr_eq(s21_memchr(str, c, n), memchr(str, c, n));
+START_TEST(test_memchr_9) {
+  char str[] = "435785675";
+  int ch = 'g';
+  size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
 }
 END_TEST
 
-START_TEST(test10_memchr) {
-  char str[] = "Hello, world!";
-  size_t n = strlen(str);
-  int c = 0;
-  ck_assert_ptr_eq(s21_memchr(str, c, n), memchr(str, c, n));
+START_TEST(test_memchr_10) {
+  char str[] = "435785675";
+  int ch = '\0';
+  size_t len = 9;
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
 }
-END_TEST
+
+START_TEST(test_memchr_11) {
+  char str[] = "Hello";
+  int ch = 'l';
+  size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+}
 
 Suite *test_memchr() {
   Suite *suite = suite_create("memchr");
   TCase *tcase = tcase_create("memchr_tcase");
 
-  tcase_add_test(tcase, test1_memchr);
-  tcase_add_test(tcase, test2_memchr);
-  tcase_add_test(tcase, test3_memchr);
-  tcase_add_test(tcase, test4_memchr);
-  tcase_add_test(tcase, test5_memchr);
-  tcase_add_test(tcase, test6_memchr);
-  tcase_add_test(tcase, test7_memchr);
-  tcase_add_test(tcase, test8_memchr);
-  tcase_add_test(tcase, test9_memchr);
-  tcase_add_test(tcase, test10_memchr);
+  tcase_add_test(tcase, test_memchr_1);
+  tcase_add_test(tcase, test_memchr_2);
+  tcase_add_test(tcase, test_memchr_3);
+  tcase_add_test(tcase, test_memchr_4);
+  tcase_add_test(tcase, test_memchr_5);
+  tcase_add_test(tcase, test_memchr_6);
+  tcase_add_test(tcase, test_memchr_7);
+  tcase_add_test(tcase, test_memchr_8);
+  tcase_add_test(tcase, test_memchr_9);
+  tcase_add_test(tcase, test_memchr_10);
+  tcase_add_test(tcase, test_memchr_11);
 
   suite_add_tcase(suite, tcase);
   return suite;

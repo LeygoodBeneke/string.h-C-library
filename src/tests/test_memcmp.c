@@ -1,160 +1,79 @@
+#include <check.h>
+#include <string.h>
+
 #include "../s21_test.h"
 
-START_TEST(test1_memcmp) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  size_t n = strlen(str1);
-  int res1 = s21_memcmp(str1, str2, n);
-  int res2 = memcmp(str1, str2, n);
-  if (res1 > 0) res1 = 1;
-  if (res1 < 0) res1 = -1;
-  if (res2 > 0) res2 = 1;
-  if (res2 < 0) res2 = -1;
-  ck_assert_int_eq(res1, res2);
+START_TEST(memcmp_test_1) {
+  char test_arr_1[] = "This tutorial should be exercised on the host system";
+  char test_arr_2[] = "This tutorial should be exercised on the host system";
+
+  int res_original = memcmp(test_arr_1, test_arr_2, strlen(test_arr_1));
+  int res_s21 = s21_memcmp(test_arr_1, test_arr_2, strlen(test_arr_1));
+
+  ck_assert_int_eq(res_original, res_s21);
 }
 END_TEST
 
-START_TEST(test2_memcmp) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
-  size_t n = 0;
-  int res1 = s21_memcmp(str1, str2, n);
-  int res2 = memcmp(str1, str2, n);
-  if (res1 > 0) res1 = 1;
-  if (res1 < 0) res1 = -1;
-  if (res2 > 0) res2 = 1;
-  if (res2 < 0) res2 = -1;
-  ck_assert_int_eq(res1, res2);
+START_TEST(memcmp_test_2) {
+  char test_arr_1[] = "This tutorial should be exercised on the host system";
+  char test_arr_2[] = "This tutorial should be exercised";
+
+  int res_original = memcmp(test_arr_1, test_arr_2, strlen(test_arr_1));
+  int res_s21 = s21_memcmp(test_arr_1, test_arr_2, strlen(test_arr_1));
+
+  ck_assert_int_eq(res_original, res_s21);
 }
 END_TEST
 
-START_TEST(test3_memcmp) {
-  char str1[] = "";
-  char str2[] = "";
-  size_t n = strlen(str1);
-  int res1 = s21_memcmp(str1, str2, n);
-  int res2 = memcmp(str1, str2, n);
-  if (res1 > 0) res1 = 1;
-  if (res1 < 0) res1 = -1;
-  if (res2 > 0) res2 = 1;
-  if (res2 < 0) res2 = -1;
-  ck_assert_int_eq(res1, res2);
+START_TEST(memcmp_test_3) {
+  int test_arr_1[] = {1, 2, 3, 4, 5};
+  int test_arr_2[] = {1, 2, 3, 4, 5};
+
+  int res_original = memcmp(test_arr_1, test_arr_2, 5);
+  int res_s21 = s21_memcmp(test_arr_1, test_arr_2, 5);
+
+  ck_assert_int_eq(res_original, res_s21);
 }
 END_TEST
 
-START_TEST(test4_memcmp) {
-  char str1[] = "";
-  char str2[] = "\0";
-  size_t n = strlen(str1);
-  int res1 = s21_memcmp(str1, str2, n);
-  int res2 = memcmp(str1, str2, n);
-  if (res1 > 0) res1 = 1;
-  if (res1 < 0) res1 = -1;
-  if (res2 > 0) res2 = 1;
-  if (res2 < 0) res2 = -1;
-  ck_assert_int_eq(res1, res2);
+START_TEST(memcmp_test_4) {
+  int test_arr_1[] = {1, 2, 3, 4, 5};
+  int test_arr_2[] = {1, 2, 8, 4, 5};
+
+  int res_original = memcmp(test_arr_1, test_arr_2, 5);
+  int res_s21 = s21_memcmp(test_arr_1, test_arr_2, 5);
+
+  ck_assert_int_eq(res_original, res_s21);
 }
 END_TEST
 
-START_TEST(test5_memcmp) {
-  char str1[] = "Hello";
-  char str2[] = "Hello, world!";
-  size_t n = strlen(str1);
-  int res1 = s21_memcmp(str1, str2, n);
-  int res2 = memcmp(str1, str2, n);
-  if (res1 > 0) res1 = 1;
-  if (res1 < 0) res1 = -1;
-  if (res2 > 0) res2 = 1;
-  if (res2 < 0) res2 = -1;
-  ck_assert_int_eq(res1, res2);
-}
-END_TEST
+START_TEST(memcmp_test_5) {
+  int test_arr_1[] = {1, 2, 3, 4, 5};
+  int test_arr_2[] = {1, 2, 3};
 
-START_TEST(test6_memcmp) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello";
-  size_t n = strlen(str1);
-  int res1 = s21_memcmp(str1, str2, n);
-  int res2 = memcmp(str1, str2, n);
-  if (res1 > 0) res1 = 1;
-  if (res1 < 0) res1 = -1;
-  if (res2 > 0) res2 = 1;
-  if (res2 < 0) res2 = -1;
-  ck_assert_int_eq(res1, res2);
-}
-END_TEST
+  int res_original = memcmp(test_arr_1, test_arr_2, 5);
+  int res_s21 = s21_memcmp(test_arr_1, test_arr_2, 5);
 
-START_TEST(test7_memcmp) {
-  char str1[] = "hello, world!";
-  char str2[] = "Hello, world!";
-  size_t n = strlen(str1);
-  int res1 = s21_memcmp(str1, str2, n);
-  int res2 = memcmp(str1, str2, n);
-  if (res1 > 0) res1 = 1;
-  if (res1 < 0) res1 = -1;
-  if (res2 > 0) res2 = 1;
-  if (res2 < 0) res2 = -1;
-  ck_assert_int_eq(res1, res2);
-}
-END_TEST
-
-START_TEST(test8_memcmp) {
-  char str1[] = "Hello, world!";
-  char str2[] = "hello, world!";
-  size_t n = strlen(str1);
-  int res1 = s21_memcmp(str1, str2, n);
-  int res2 = memcmp(str1, str2, n);
-  if (res1 > 0) res1 = 1;
-  if (res1 < 0) res1 = -1;
-  if (res2 > 0) res2 = 1;
-  if (res2 < 0) res2 = -1;
-  ck_assert_int_eq(res1, res2);
-}
-END_TEST
-
-START_TEST(test9_memcmp) {
-  char str1[] = "Hello, worlD";
-  char str2[] = "Hello, world";
-  size_t n = strlen(str1);
-  int res1 = s21_memcmp(str1, str2, n);
-  int res2 = memcmp(str1, str2, n);
-  if (res1 > 0) res1 = 1;
-  if (res1 < 0) res1 = -1;
-  if (res2 > 0) res2 = 1;
-  if (res2 < 0) res2 = -1;
-  ck_assert_int_eq(res1, res2);
-}
-END_TEST
-
-START_TEST(test10_memcmp) {
-  char str1[] = "Hello, world";
-  char str2[] = "Hello, worlD";
-  size_t n = strlen(str1);
-  int res1 = s21_memcmp(str1, str2, n);
-  int res2 = memcmp(str1, str2, n);
-  if (res1 > 0) res1 = 1;
-  if (res1 < 0) res1 = -1;
-  if (res2 > 0) res2 = 1;
-  if (res2 < 0) res2 = -1;
-  ck_assert_int_eq(res1, res2);
+  ck_assert_int_eq(res_original, res_s21);
 }
 END_TEST
 
 Suite *test_memcmp() {
-  Suite *suite = suite_create("memcmp");
-  TCase *tcase = tcase_create("memcmp_tcase");
+  Suite *memcmp_suite;
 
-  tcase_add_test(tcase, test1_memcmp);
-  tcase_add_test(tcase, test2_memcmp);
-  tcase_add_test(tcase, test3_memcmp);
-  tcase_add_test(tcase, test4_memcmp);
-  tcase_add_test(tcase, test5_memcmp);
-  tcase_add_test(tcase, test6_memcmp);
-  tcase_add_test(tcase, test7_memcmp);
-  tcase_add_test(tcase, test8_memcmp);
-  tcase_add_test(tcase, test9_memcmp);
-  tcase_add_test(tcase, test10_memcmp);
+  TCase *tc_memcmp_case;
 
-  suite_add_tcase(suite, tcase);
-  return suite;
+  memcmp_suite = suite_create("memcmp_test_suite");
+
+  tc_memcmp_case = tcase_create("base_memcmp_case");
+
+  tcase_add_test(tc_memcmp_case, memcmp_test_1);
+  tcase_add_test(tc_memcmp_case, memcmp_test_2);
+  tcase_add_test(tc_memcmp_case, memcmp_test_3);
+  tcase_add_test(tc_memcmp_case, memcmp_test_4);
+  tcase_add_test(tc_memcmp_case, memcmp_test_5);
+
+  suite_add_tcase(memcmp_suite, tc_memcmp_case);
+
+  return memcmp_suite;
 }

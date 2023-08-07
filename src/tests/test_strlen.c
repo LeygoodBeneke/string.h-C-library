@@ -1,64 +1,32 @@
+#include <check.h>
+#include <string.h>
+
 #include "../s21_test.h"
 
 START_TEST(test1_strlen) {
-  char str[] = "Hello, world!";
-  ck_assert_int_eq(s21_strlen(str), strlen(str));
+  const char *src = "world!";
+  ck_assert_int_eq(strlen(src), s21_strlen(src));
 }
-END_TEST
 
 START_TEST(test2_strlen) {
-  char str[] = "";
-  ck_assert_int_eq(s21_strlen(str), strlen(str));
+  const char *src = "world\0";
+  ck_assert_int_eq(strlen(src), s21_strlen(src));
 }
-END_TEST
 
 START_TEST(test3_strlen) {
-  char str[] = "Hello,\0 world!";
-  ck_assert_int_eq(s21_strlen(str), strlen(str));
+  const char *src = " ";
+  ck_assert_int_eq(strlen(src), s21_strlen(src));
 }
-END_TEST
 
 START_TEST(test4_strlen) {
-  char str[] = "\0";
-  ck_assert_int_eq(s21_strlen(str), strlen(str));
+  const char *src = "$";
+  ck_assert_int_eq(strlen(src), s21_strlen(src));
 }
-END_TEST
 
 START_TEST(test5_strlen) {
-  char str[] = "   ";
-  ck_assert_int_eq(s21_strlen(str), strlen(str));
+  const char *src = "\0";
+  ck_assert_int_eq(strlen(src), s21_strlen(src));
 }
-END_TEST
-
-START_TEST(test6_strlen) {
-  char str[] = "H";
-  ck_assert_int_eq(s21_strlen(str), strlen(str));
-}
-END_TEST
-
-START_TEST(test7_strlen) {
-  char str[] = "He";
-  ck_assert_int_eq(s21_strlen(str), strlen(str));
-}
-END_TEST
-
-START_TEST(test8_strlen) {
-  char str[] = "Hel";
-  ck_assert_int_eq(s21_strlen(str), strlen(str));
-}
-END_TEST
-
-START_TEST(test9_strlen) {
-  char str[] = "Hell";
-  ck_assert_int_eq(s21_strlen(str), strlen(str));
-}
-END_TEST
-
-START_TEST(test10_strlen) {
-  char str[] = "Hello";
-  ck_assert_int_eq(s21_strlen(str), strlen(str));
-}
-END_TEST
 
 Suite *test_strlen() {
   Suite *suite = suite_create("strlen");
@@ -69,11 +37,6 @@ Suite *test_strlen() {
   tcase_add_test(tcase, test3_strlen);
   tcase_add_test(tcase, test4_strlen);
   tcase_add_test(tcase, test5_strlen);
-  tcase_add_test(tcase, test6_strlen);
-  tcase_add_test(tcase, test7_strlen);
-  tcase_add_test(tcase, test8_strlen);
-  tcase_add_test(tcase, test9_strlen);
-  tcase_add_test(tcase, test10_strlen);
 
   suite_add_tcase(suite, tcase);
   return suite;

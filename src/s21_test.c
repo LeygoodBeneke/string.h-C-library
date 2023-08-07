@@ -1,3 +1,4 @@
+
 #include "s21_test.h"
 
 void print_info(Suite *suite) {
@@ -14,32 +15,17 @@ void print_info(Suite *suite) {
 }
 
 int main() {
-  Suite *suites[] = {test_memchr(),
-                     test_memcmp(),
-                     test_memcpy(),
-                     test_memset(),
-                     test_strchr(),
-                     test_strcspn(),
-                     test_strerror(),
-                     test_strlen(),
-                     test_strncat(),
-                     test_strncmp(),
-                     test_strncpy(),
-                     test_strpbrk(),
-                     test_strrchr(),
-                     test_strstr(),
-                     test_strtok(),
-                     test_to_lower(),
-                     test_to_upper(),
-                     test_insert(),
-                     test_trim(),
-                     test_sprintf_c(),
-                     test_sprintf_d(),
-                     test_sprintf_f(),
-                     test_sprintf_s(),
-                     test_sprintf_u(),
-                     test_sprintf_percent(),
-                     NULL};
+  Suite *suites[] = {test_memchr(),   test_memcmp(),
+                     test_memcpy(),   test_memset(),
+                     test_strncat(),  test_strchr(),
+                     test_strncmp(),  test_strncpy(),
+                     test_strcspn(),  test_strerror(),
+                     test_strlen(),   test_strpbrk(),
+                     test_strrchr(),  test_strstr(),
+                     test_strtok(),   test_sprintf(),
+                     test_sscanf(),   test_insert(),
+                     test_to_upper(), test_to_lower(),
+                     test_trim(),     NULL};
 
   for (int i = 0; suites[i] != NULL; i++) {
     print_info(suites[i]);
