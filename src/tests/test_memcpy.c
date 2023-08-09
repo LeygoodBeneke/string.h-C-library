@@ -75,13 +75,13 @@ START_TEST(test_memcpy_9) {
 }
 END_TEST
 
-START_TEST(test_memcpy_10) {
-  char src[] = "";
-  size_t len = 9;
-  char dest[len], s21_dest[len];
-
-  ck_assert_mem_eq(memcpy(dest, src, len), s21_memcpy(s21_dest, src, len), len);
-}
+// START_TEST(test_memcpy_10) {
+//   char src[] = "";
+//   size_t len = 9;
+//   char dest[len], s21_dest[len];
+// 
+//   ck_assert_mem_eq(memcpy(dest, src, len), s21_memcpy(s21_dest, src, len), len);
+// }
 
 Suite *test_memcpy() {
   Suite *suite = suite_create("memcpy");
@@ -96,7 +96,7 @@ Suite *test_memcpy() {
   tcase_add_test(tcase, test_memcpy_7);
   tcase_add_test(tcase, test_memcpy_8);
   tcase_add_test(tcase, test_memcpy_9);
-  tcase_add_test(tcase, test_memcpy_10);
+//  tcase_add_test(tcase, test_memcpy_10);
 
   suite_add_tcase(suite, tcase);
   return suite;

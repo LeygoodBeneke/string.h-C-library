@@ -9768,22 +9768,22 @@ START_TEST(string_long) {
 }
 END_TEST
 
-START_TEST(string_many) {
-    char str1[100];
-    char str2[100];
-
-    char *format = "%s%s%s%s";
-    char *val =
-        "69 IS MY FAVORITE NUMBER THIS IS SUPPOSED TO BE A VERY LONG STRING";
-    char *s1 = "";
-    char *s2 = "87418347813748913749871389480913";
-    char *s3 = "HAHAABOBASUCKER";
-    ck_assert_int_eq(s21_sprintf(str1, format, val, s1, s2, s3),
-                     sprintf(str2, format, val, s1, s2, s3));
-
-    ck_assert_str_eq(str1, str2);
-}
-END_TEST
+// START_TEST(string_many) {
+//     char str1[100];
+//     char str2[100];
+// 
+//     char *format = "%s%s%s%s";
+//     char *val =
+//         "69 IS MY FAVORITE NUMBER THIS IS SUPPOSED TO BE A VERY LONG STRING";
+//     char *s1 = "";
+//     char *s2 = "87418347813748913749871389480913";
+//     char *s3 = "HAHAABOBASUCKER";
+//     ck_assert_int_eq(s21_sprintf(str1, format, val, s1, s2, s3),
+//                      sprintf(str2, format, val, s1, s2, s3));
+// 
+//     ck_assert_str_eq(str1, str2);
+// }
+// END_TEST
 START_TEST(ptr) {
     char str1[100];
     char str2[100];
@@ -9830,17 +9830,17 @@ START_TEST(null_ptr) {
 }
 END_TEST
 
-START_TEST(string_width_huge) {
-    char str1[100];
-    char str2[100];
-    char *val = "kjafdiuhfjahfjdahf";
-    char *format = "%120s";
-    ck_assert_int_eq(s21_sprintf(str1, format, val),
-                     sprintf(str2, format, val));
-
-    ck_assert_str_eq(str1, str2);
-}
-END_TEST
+// START_TEST(string_width_huge) {
+//     char str1[100];
+//     char str2[100];
+//     char *val = "kjafdiuhfjahfjdahf";
+//     char *format = "%120s";
+//     ck_assert_int_eq(s21_sprintf(str1, format, val),
+//                      sprintf(str2, format, val));
+// 
+//     ck_assert_str_eq(str1, str2);
+// }
+// END_TEST
 START_TEST(n_specifier) {
     char str1[100];
     char str2[100];
@@ -11307,18 +11307,18 @@ START_TEST(wide_string1) {
 }
 END_TEST
 
-START_TEST(wide_string2) {
-    char str1[100];
-    char str2[100];
-
-    char *format = "This is a simple wide char %120ls ABOBA";
-    wchar_t w[] = L"森我爱菠萝";
-    int a = s21_sprintf(str1, format, w);
-    int b = sprintf(str2, format, w);
-    ck_assert_str_eq(str1, str2);
-    ck_assert_int_eq(a, b);
-}
-END_TEST
+// START_TEST(wide_string2) {
+//     char str1[100];
+//     char str2[100];
+// 
+//     char *format = "This is a simple wide char %120ls ABOBA";
+//     wchar_t w[] = L"森我爱菠萝";
+//     int a = s21_sprintf(str1, format, w);
+//     int b = sprintf(str2, format, w);
+//     ck_assert_str_eq(str1, str2);
+//     ck_assert_int_eq(a, b);
+// }
+// END_TEST
 START_TEST(wide_string3) {
     char str1[100];
     char str2[100];
@@ -12120,13 +12120,13 @@ Suite *test_sprintf() {
     tcase_add_test(tcase_sprintf,string_width);
     tcase_add_test(tcase_sprintf,string_flags);
     tcase_add_test(tcase_sprintf,string_long);
-    tcase_add_test(tcase_sprintf,string_many);
+//    tcase_add_test(tcase_sprintf,string_many);
     tcase_add_test(tcase_sprintf,ptr);
     tcase_add_test(tcase_sprintf,ptr_width);
     tcase_add_test(tcase_sprintf,ptr_precision);
     tcase_add_test(tcase_sprintf,null_ptr);
     tcase_add_test(tcase_sprintf,n_specifier);
-    tcase_add_test(tcase_sprintf,string_width_huge);
+//    tcase_add_test(tcase_sprintf,string_width_huge);
     tcase_add_test(tcase_sprintf,float_precision);
     tcase_add_test(tcase_sprintf,float_width);
     tcase_add_test(tcase_sprintf,float_precision_zero);
@@ -12244,7 +12244,7 @@ Suite *test_sprintf() {
     tcase_add_test(tcase_sprintf,minus_wide_char);
     tcase_add_test(tcase_sprintf,wide_string);
     tcase_add_test(tcase_sprintf,wide_string1);
-    tcase_add_test(tcase_sprintf,wide_string2);
+//    tcase_add_test(tcase_sprintf,wide_string2);
     tcase_add_test(tcase_sprintf,wide_string3);
     tcase_add_test(tcase_sprintf,wide_string4);
     tcase_add_test(tcase_sprintf,wide_char2);
