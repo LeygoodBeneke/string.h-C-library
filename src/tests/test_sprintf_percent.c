@@ -1,4 +1,4 @@
-#include "../s21_test.h"
+#include "s21_test.h"
 
 START_TEST(test1_sprintf_percent) {
   char str1[100] = "";

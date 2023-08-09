@@ -4,6 +4,9 @@
 #define s21_NULL 0
 #endif
 
+#include <stdarg.h>
+
+
 typedef long unsigned s21_size_t;
 
 s21_size_t s21_strlen(const char *str);

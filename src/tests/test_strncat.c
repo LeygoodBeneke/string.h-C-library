@@ -1,4 +1,4 @@
-#include "../s21_test.h"
+#include "s21_test.h"
 
 START_TEST(test1_strncat) {
   char str1[30] = "Hello, world!";

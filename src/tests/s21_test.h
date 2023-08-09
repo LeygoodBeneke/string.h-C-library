@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "s21_sprintf.h"
+#include "../s21_string.h"
 
 Suite *test_memchr();
 Suite *test_memcmp();

@@ -1,4 +1,4 @@
-#include "../s21_test.h"
+#include "s21_test.h"
 START_TEST(test1_strncpy) {
   char str1[] = "Hello, world!";
   char str2[] = "Hello, world!";
