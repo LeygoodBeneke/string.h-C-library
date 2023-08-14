@@ -215,7 +215,7 @@ void process_d(input_value data, char **string, int *idx, va_list *list) {
     }
 
     int is_negative = (long)num < 0 && data.spec == 'd', addition_len = is_negative || data.flags[1] || data.flags[2];
-    if (is_negative && data.spec == 'd') num *= -1;
+    if (is_negative) num *= -1;
     unsigned long num_copy = num, len = addition_len;
     if (num_copy == 0) len = 1 + addition_len;
     while (num_copy != 0) {
@@ -224,15 +224,14 @@ void process_d(input_value data, char **string, int *idx, va_list *list) {
     }
     if (data.precision > len)
         len = data.precision + addition_len;
-    int len_copy = len;
     data.width -= len;
     char num_string[len];
     num_string[0] = '0';
-    while (len) {
-        len--;
-        num_string[len] = '0' + (num % 10);
+    for (int i = len - 1; i >=0; i--) {
+        num_string[i] = '0' + (num % 10);
         num /= 10;
     }
+
     if (is_negative) num_string[0] = '-';
     if (data.flags[1] && !is_negative)
         num_string[0] = '+';
@@ -240,7 +239,7 @@ void process_d(input_value data, char **string, int *idx, va_list *list) {
         num_string[0] = ' ';
 
     if (data.flags[0]) {
-        for (int i = 0; i < len_copy; i++) {
+        for (int i = 0; i < len; i++) {
            (*string)[(*idx)++] = num_string[i];
         }
     }
@@ -250,7 +249,7 @@ void process_d(input_value data, char **string, int *idx, va_list *list) {
     }
 
     if (!data.flags[0]) {
-        for (int i = 0; i < len_copy; i++) {
+        for (int i = 0; i < len; i++) {
            (*string)[(*idx)++] = num_string[i];
         }
     }
@@ -266,7 +265,40 @@ void process_u(input_value data, char **string, int *idx, va_list *list) {
 void process_e(input_value data, char **string, int *idx, va_list *list) {}
 void process_f(input_value data, char **string, int *idx, va_list *list) {}
 void process_g(input_value data, char **string, int *idx, va_list *list) {}
-void process_o(input_value data, char **string, int *idx, va_list *list) {}
+void process_o(input_value data, char **string, int *idx, va_list *list) {
+    long num = 0;
+    if (data.len_description == 'l') {
+        num = va_arg(*list, long);
+    } else num = va_arg(*list, int);
+    long len = 0, num_copy = num;
+    while (num) {
+        num /= 8;
+        len++;
+    }
+    if (data.flags[4]) len++;
+    data.width -= len;
+    char num_string[len];
+    for (int i = len - 1; i >=0; i--) {
+        num_string[i] = '0' + (num % 8);
+        num /= 8;
+    }
+    if (data.flags[0]) {
+        for (int i = 0; i < len; i++) {
+           (*string)[(*idx)++] = num_string[i];
+        }
+    }
+
+    for (int i = 0; i < data.width; i++) {
+        (*string)[(*idx)++] = ' ';
+    }
+
+    if (!data.flags[0]) {
+        for (int i = 0; i < len; i++) {
+           (*string)[(*idx)++] = num_string[i];
+        }
+    }
+}
+
 void process_x(input_value data, char **string, int *idx, va_list *list) {}
 void process_p(input_value data, char **string, int *idx, va_list *list) {}
 void process_n(input_value data, char **string, int *idx, va_list *list) {}
