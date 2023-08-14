@@ -203,9 +203,9 @@ void process_d(input_value data, char **string, int *idx, va_list *list) {
         else num = (short int)va_arg(*list, int);
     }else if (data.len_description != 'l') {
         if (data.spec == 'u') num = (unsigned int)va_arg(*list, unsigned int);
-        else num = (int)va_arg(*list, int);
+        else num = va_arg(*list, int);
     } else {
-        if (data.spec == 'u') num = (unsigned long int)va_arg(*list, unsigned long int);
+        if (data.spec == 'u') num = va_arg(*list, unsigned long int);
         else num = (long int)va_arg(*list, long int);
     }
 
@@ -214,45 +214,111 @@ void process_d(input_value data, char **string, int *idx, va_list *list) {
         data.flags[2] = 0;
     }
 
-    int is_negative = (long)num < 0 && data.spec == 'd', addition_len = is_negative || data.flags[1] || data.flags[2];
-    if (is_negative) num *= -1;
-    unsigned long num_copy = num, len = addition_len;
-    if (num_copy == 0) len = 1 + addition_len;
+    char first_char = 0;
+    int is_negative = (long)num < 0 && data.spec == 'd';
+    if (is_negative) {
+        num *= -1;
+        first_char = '-';
+    } else if (data.flags[1])
+        first_char = '+';
+    else if (data.flags[2])
+        first_char = ' ';
+    int is_first = first_char != 0;
+
+    unsigned long num_copy = num, len = 0;
+    if (num_copy == 0) len = 1;
     while (num_copy != 0) {
         num_copy /= 10;
         len++;
     }
-    if (data.precision > len)
-        len = data.precision + addition_len;
-    data.width -= len;
-    char num_string[len];
-    num_string[0] = '0';
-    for (int i = len - 1; i >=0; i--) {
-        num_string[i] = '0' + (num % 10);
+    len = data.precision > len ? data.precision : len;
+    char string_abs[len];
+    for (int i = len - 1; i >= 0; i--) {
+        string_abs[i] = '0' + (num % 10); 
         num /= 10;
     }
 
-    if (is_negative) num_string[0] = '-';
-    if (data.flags[1] && !is_negative)
-        num_string[0] = '+';
-    if (data.flags[2] && num_string[0] == '0')
-        num_string[0] = ' ';
-
     if (data.flags[0]) {
+        if (is_first) {
+            (*string)[(*idx)++] = first_char;
+        }
         for (int i = 0; i < len; i++) {
-           (*string)[(*idx)++] = num_string[i];
+            (*string)[(*idx)++] = string_abs[i];
+        }
+        int add_len = data.width - len - is_first;
+        for (int i = 0; i < add_len; i++) {
+            (*string)[(*idx)++] = ' ';
+        }
+    } else {
+        if (data.flags[4]) {
+            if (is_first) {
+                (*string)[(*idx)++] = first_char;
+            }
+            int add_len = data.width - len - is_first;
+            for (int i = 0; i < add_len; i++) {
+                (*string)[(*idx)++] = '0';
+            }
+            for (int i = 0; i < len; i++) {
+                (*string)[(*idx)++] = string_abs[i];
+            }
+        } else {
+            int add_len = data.width - len - is_first;
+            for (int i = 0; i < add_len; i++) {
+                (*string)[(*idx)++] = ' ';
+            }
+            if (is_first) {
+                (*string)[(*idx)++] = first_char;
+            }
+            for (int i = 0; i < len; i++) {
+                (*string)[(*idx)++] = string_abs[i];
+            }
         }
     }
 
-    for (int i = 0; i < data.width; i++) {
-        (*string)[(*idx)++] = ' ';
-    }
 
-    if (!data.flags[0]) {
-        for (int i = 0; i < len; i++) {
-           (*string)[(*idx)++] = num_string[i];
-        }
-    }
+
+//     int is_negative = (long)num < 0 && data.spec == 'd', addition_len = is_negative || data.flags[1] || data.flags[2];
+//     if (is_negative) num *= -1;
+//     unsigned long num_copy = num, len = addition_len;
+//     if (num_copy == 0) len = 1 + addition_len;
+//     while (num_copy != 0) {
+//         num_copy /= 10;
+//         len++;
+//     }
+//     if (data.precision > len)
+//         len = data.precision + addition_len;
+//     data.width -= len;
+//     char num_string[len];
+//     num_string[0] = '0';
+//     for (int i = len - 1; i >=0; i--) {
+//         num_string[i] = '0' + (num % 10);
+//         num /= 10;
+//     }
+// 
+//     if (is_negative) num_string[0] = '-';
+//     if (data.flags[1] && !is_negative)
+//         num_string[0] = '+';
+//     if (data.flags[2] && num_string[0] == '0')
+//         num_string[0] = ' ';
+// 
+//     if (data.flags[0]) {
+//         for (int i = 0; i < len; i++) {
+//            (*string)[(*idx)++] = num_string[i];
+//         }
+//     }
+// 
+//     for (int i = 0; i < data.width; i++) {
+//         if (!data.flags[0])
+//             (*string)[(*idx)++] = data.flags[4] ? '0' : ' ';
+//         else 
+//             (*string)[(*idx)++] = ' ';
+//     }
+// 
+//     if (!data.flags[0]) {
+//         for (int i = 0; i < len; i++) {
+//            (*string)[(*idx)++] = num_string[i];
+//         }
+//     }
 }
 void process_i(input_value data, char **string, int *idx, va_list *list) {
     data.spec = 'd';
