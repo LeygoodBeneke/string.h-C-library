@@ -357,6 +357,8 @@ void process_x(input_value data, char **string, int *idx, va_list *list) {
     } else {
         num = (unsigned long int)va_arg(*list, long int);
     }
+    
+    char c = data.spec == 'x' ? 'a' : 'A';
 
     unsigned long num_copy = num, len = 0, is_x = num != 0 && data.flags[3];
     if (num_copy == 0) len = 1;
@@ -369,7 +371,7 @@ void process_x(input_value data, char **string, int *idx, va_list *list) {
     for (int i = len - 1; i >= 0; i--) {
 
         if (num % 16 < 10) string_abs[i] = '0' + (num % 16); 
-        else string_abs[i] = 'a' + (num % 16 - 10);
+        else string_abs[i] = c + (num % 16 - 10);
         num /= 16;
     }
 
@@ -413,7 +415,85 @@ void process_x(input_value data, char **string, int *idx, va_list *list) {
         }
     }
 }
-void process_p(input_value data, char **string, int *idx, va_list *list) {}
+void process_p(input_value data, char **string, int *idx, va_list *list) {
+
+    unsigned long int num = 0;
+    int *pointer = va_arg(*list, int *);
+    num = (long)pointer;
+
+    unsigned long num_copy = num, len = 0, is_x = num != 0 && data.flags[3];
+    if (num_copy == 0) len = 1;
+    while (num_copy != 0) {
+        num_copy /= 16;
+        len++;
+    }
+    len = data.precision > len ? data.precision : len;
+    if (pointer == s21_NULL) {
+        len = 5;
+    }
+    char string_abs[len]; int first = 0;
+    if (data.flags[1] || data.flags[2]) first = 1;
+
+    for (int i = len - 1; i >= 0; i--) {
+        if (num % 16 < 10) string_abs[i] = '0' + (num % 16); 
+        else string_abs[i] = 'a' + (num % 16 - 10);
+        num /= 16;
+    }
+
+    if (pointer == s21_NULL) {
+        char *st = "(nil)";
+        first = 0;
+        for (int i = 0; i < 5; i++)
+            string_abs[i] = st[i];
+    } else is_x = 1;
+
+    if (data.flags[0]) {
+        if (pointer != s21_NULL) {
+            if (data.flags[1]) (*string)[(*idx)++] = '+';
+            else if (data.flags[2]) (*string)[(*idx)++] = ' ';
+
+            (*string)[(*idx)++] = '0';
+            (*string)[(*idx)++] = 'x';
+        }
+        for (int i = 0; i < len; i++) {
+            (*string)[(*idx)++] = string_abs[i];
+        }
+        int add_len = data.width - len - is_x * 2 - first;
+        for (int i = 0; i < add_len; i++) {
+            (*string)[(*idx)++] = ' ';
+        }
+    } else {
+        if (data.flags[4]) {
+            if (pointer != s21_NULL) {
+                if (data.flags[1]) (*string)[(*idx)++] = '+';
+                else if (data.flags[2]) (*string)[(*idx)++] = ' ';
+                (*string)[(*idx)++] = '0';
+                (*string)[(*idx)++] = 'x';
+            }
+            int add_len = data.width - len - is_x * 2 - first;
+            for (int i = 0; i < add_len; i++) {
+                (*string)[(*idx)++] = '0';
+            }
+            for (int i = 0; i < len; i++) {
+                (*string)[(*idx)++] = string_abs[i];
+            }
+        } else {
+            int add_len = data.width - len - is_x * 2 - first;
+            for (int i = 0; i < add_len; i++) {
+                (*string)[(*idx)++] = ' ';
+            }
+            if (pointer != s21_NULL) {
+                if (data.flags[1]) (*string)[(*idx)++] = '+';
+                else if (data.flags[2]) (*string)[(*idx)++] = ' ';
+                (*string)[(*idx)++] = '0';
+                (*string)[(*idx)++] = 'x';
+            }
+            for (int i = 0; i < len; i++) {
+                (*string)[(*idx)++] = string_abs[i];
+            }
+        }
+    }
+}
 void process_n(input_value data, char **string, int *idx, va_list *list) {}
 
 void _print_input_value(input_value tmp) {
