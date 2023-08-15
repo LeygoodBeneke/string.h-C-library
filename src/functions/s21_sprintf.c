@@ -20,6 +20,7 @@ typedef struct {
     int is_star_width;
     int is_star_precision;
     int string_len;
+    int _is_precision;
 } input_value;
 
 typedef struct {
@@ -34,6 +35,9 @@ char *star_check(char *string, int *value);
 void proccess_input_value(char **string, int *idx, input_value data, va_list *list);
 int is_valid_spec(char spec);
 void init_call_back(funcs_processing *fp);
+void print_symbols(char **string, int *idx, int len, char symbol);
+int get_num_len(unsigned long num, int base);
+void num_to_string(char *string, int len, unsigned long num, int base, char spec);
 
 void process_c(input_value data, char **string, int *idx, va_list *list);
 void process_s(input_value data, char **string, int *idx, va_list *list);
@@ -92,9 +96,12 @@ void write_data(char *str, input_value *dest) {
     if (str_copy && *str_copy == '.') {
         str_copy++;
         str_copy = num_proccessing(str_copy, &dest->precision);
+        dest->_is_precision = 1;
     }
     str_copy = star_check(str_copy, &dest->is_star_precision);
     str_copy = specs_check(str_copy, &dest->len_description, DESCRIPTION_LEN, (char *)desc);
+    if (dest->len_description == 'l')
+        str_copy = specs_check(str_copy, &dest->len_description, DESCRIPTION_LEN, (char *)desc);
     str_copy = specs_check(str_copy, &dest->spec, SPECS_LEN, (char *)specs);
     if (str && str_copy) dest->string_len = str_copy - str + 1;
     if (!dest->spec) dest->string_len = 1;
@@ -128,21 +135,21 @@ char *star_check(char *string, int *value) {
 }
 
 void init_call_back(funcs_processing *fp) {
-    fp->functions[0]   = &process_c;
-    fp->functions[1]   = &process_s;
-    fp->functions[2]   = &process_d;
-    fp->functions[3]   = &process_i;
-    fp->functions[4]   = &process_u;
-    fp->functions[5]   = &process_e;
-    fp->functions[6]   = &process_e;
-    fp->functions[7]   = &process_f;
-    fp->functions[8]   = &process_g;
-    fp->functions[9]   = &process_g;
-    fp->functions[10]  = &process_o;
-    fp->functions[11]  = &process_x;
-    fp->functions[12]  = &process_x;
-    fp->functions[13]  = &process_p;
-    fp->functions[14]  = &process_n;
+    fp->functions[0]  = &process_c;
+    fp->functions[1]  = &process_s;
+    fp->functions[2]  = &process_d;
+    fp->functions[3]  = &process_i;
+    fp->functions[4]  = &process_u;
+    fp->functions[5]  = &process_e;
+    fp->functions[6]  = &process_e;
+    fp->functions[7]  = &process_f;
+    fp->functions[8]  = &process_g;
+    fp->functions[9]  = &process_g;
+    fp->functions[10] = &process_o;
+    fp->functions[11] = &process_x;
+    fp->functions[12] = &process_x;
+    fp->functions[13] = &process_p;
+    fp->functions[14] = &process_n;
 }
 
 void proccess_input_value(char **string, int *idx, input_value data, va_list *list) {
@@ -181,18 +188,22 @@ int is_valid_spec(char spec) {
 void process_c(input_value data, char **string, int *idx, va_list *list) {
     data.width--;
    if (data.flags[0]) (*string)[(*idx)++] = va_arg(*list, int);
-   for (int i = 0; i < data.width; i++) {
-       (*string)[(*idx)++] = ' ';
-   }
+   print_symbols(string, idx, data.width, ' ');
    if (!data.flags[0]) (*string)[(*idx)++] = va_arg(*list, int);
 }
 
 void process_s(input_value data, char **string, int *idx, va_list *list) {
     char *str = va_arg(*list, char*);
-    data.width -= s21_strlen(str);
-    for (unsigned int i = 0; i < s21_strlen(str); i++) {
+    int len = s21_strlen(str);
+    if (data._is_precision)
+        if (data.precision < len) len = data.precision;
+    data.width -= len;
+    if (!data.flags[0])
+       print_symbols(string, idx, data.width, ' ');
+    for (int i = 0; i < len; i++)
        (*string)[(*idx)++] = str[i];
-    }
+    if (data.flags[0])
+       print_symbols(string, idx, data.width, ' ');
 }
 
 void process_d(input_value data, char **string, int *idx, va_list *list) {
@@ -226,17 +237,10 @@ void process_d(input_value data, char **string, int *idx, va_list *list) {
     int is_first = first_char != 0;
 
     unsigned long num_copy = num, len = 0;
-    if (num_copy == 0) len = 1;
-    while (num_copy != 0) {
-        num_copy /= 10;
-        len++;
-    }
+    len = get_num_len(num_copy, 10);
     len = data.precision > len ? data.precision : len;
     char string_abs[len];
-    for (int i = len - 1; i >= 0; i--) {
-        string_abs[i] = '0' + (num % 10); 
-        num /= 10;
-    }
+    num_to_string(string_abs, len, num, 10, data.spec);
 
     if (data.flags[0]) {
         if (is_first) {
@@ -246,26 +250,20 @@ void process_d(input_value data, char **string, int *idx, va_list *list) {
             (*string)[(*idx)++] = string_abs[i];
         }
         int add_len = data.width - len - is_first;
-        for (int i = 0; i < add_len; i++) {
-            (*string)[(*idx)++] = ' ';
-        }
+        print_symbols(string, idx, add_len, ' ');
     } else {
         if (data.flags[4]) {
             if (is_first) {
                 (*string)[(*idx)++] = first_char;
             }
             int add_len = data.width - len - is_first;
-            for (int i = 0; i < add_len; i++) {
-                (*string)[(*idx)++] = '0';
-            }
+            print_symbols(string, idx, add_len, '0');
             for (int i = 0; i < len; i++) {
                 (*string)[(*idx)++] = string_abs[i];
             }
         } else {
             int add_len = data.width - len - is_first;
-            for (int i = 0; i < add_len; i++) {
-                (*string)[(*idx)++] = ' ';
-            }
+            print_symbols(string, idx, add_len, ' ');
             if (is_first) {
                 (*string)[(*idx)++] = first_char;
             }
@@ -275,10 +273,12 @@ void process_d(input_value data, char **string, int *idx, va_list *list) {
         }
     }
 }
+
 void process_i(input_value data, char **string, int *idx, va_list *list) {
     data.spec = 'd';
     process_d(data, string, idx, list);
 }
+
 void process_u(input_value data, char **string, int *idx, va_list *list) {
     process_d(data, string, idx, list);
 }
@@ -301,18 +301,11 @@ void process_o(input_value data, char **string, int *idx, va_list *list) {
     char first_char = 0;
 
     unsigned long num_copy = num, len = 0;
-    if (num_copy == 0) len = 1;
-    while (num_copy != 0) {
-        num_copy /= 8;
-        len++;
-    }
+    len = get_num_len(num_copy, 8);
     if (data.flags[3] && num) len++;
     len = data.precision > len ? data.precision : len;
     char string_abs[len];
-    for (int i = len - 1; i >= 0; i--) {
-        string_abs[i] = '0' + (num % 8); 
-        num /= 8;
-    }
+    num_to_string(string_abs, len, num, 8, data.spec);
     int is_first = first_char != 0;
 
     if (data.flags[0]) {
@@ -320,23 +313,17 @@ void process_o(input_value data, char **string, int *idx, va_list *list) {
             (*string)[(*idx)++] = string_abs[i];
         }
         int add_len = data.width - len - is_first;
-        for (int i = 0; i < add_len; i++) {
-            (*string)[(*idx)++] = ' ';
-        }
+        print_symbols(string, idx, add_len, ' ');
     } else {
         if (data.flags[4]) {
             int add_len = data.width - len;
-            for (int i = 0; i < add_len; i++) {
-                (*string)[(*idx)++] = '0';
-            }
+            print_symbols(string, idx, add_len, '0');
             for (int i = 0; i < len; i++) {
                 (*string)[(*idx)++] = string_abs[i];
             }
         } else {
             int add_len = data.width - len;
-            for (int i = 0; i < add_len; i++) {
-                (*string)[(*idx)++] = ' ';
-            }
+            print_symbols(string, idx, add_len, ' ');
             if (is_first) {
                 (*string)[(*idx)++] = first_char;
             }
@@ -361,19 +348,10 @@ void process_x(input_value data, char **string, int *idx, va_list *list) {
     char c = data.spec == 'x' ? 'a' : 'A';
 
     unsigned long num_copy = num, len = 0, is_x = num != 0 && data.flags[3];
-    if (num_copy == 0) len = 1;
-    while (num_copy != 0) {
-        num_copy /= 16;
-        len++;
-    }
+    len = get_num_len(num_copy, 16);
     len = data.precision > len ? data.precision : len;
     char string_abs[len];
-    for (int i = len - 1; i >= 0; i--) {
-
-        if (num % 16 < 10) string_abs[i] = '0' + (num % 16); 
-        else string_abs[i] = c + (num % 16 - 10);
-        num /= 16;
-    }
+    num_to_string(string_abs, len, num, 16, data.spec);
 
     if (data.flags[0]) {
         if (is_x) {
@@ -384,9 +362,7 @@ void process_x(input_value data, char **string, int *idx, va_list *list) {
             (*string)[(*idx)++] = string_abs[i];
         }
         int add_len = data.width - len - is_x * 2;
-        for (int i = 0; i < add_len; i++) {
-            (*string)[(*idx)++] = ' ';
-        }
+        print_symbols(string, idx, add_len, ' ');
     } else {
         if (data.flags[4]) {
             if (is_x) {
@@ -394,17 +370,13 @@ void process_x(input_value data, char **string, int *idx, va_list *list) {
                 (*string)[(*idx)++] = data.spec;
             }
             int add_len = data.width - len - is_x * 2;
-            for (int i = 0; i < add_len; i++) {
-                (*string)[(*idx)++] = '0';
-            }
+            print_symbols(string, idx, add_len, '0');
             for (int i = 0; i < len; i++) {
                 (*string)[(*idx)++] = string_abs[i];
             }
         } else {
             int add_len = data.width - len - is_x * 2;
-            for (int i = 0; i < add_len; i++) {
-                (*string)[(*idx)++] = ' ';
-            }
+            print_symbols(string, idx, add_len, ' ');
             if (is_x) {
                 (*string)[(*idx)++] = '0';
                 (*string)[(*idx)++] = data.spec;
@@ -415,6 +387,7 @@ void process_x(input_value data, char **string, int *idx, va_list *list) {
         }
     }
 }
+
 void process_p(input_value data, char **string, int *idx, va_list *list) {
 
     unsigned long int num = 0;
@@ -422,23 +395,14 @@ void process_p(input_value data, char **string, int *idx, va_list *list) {
     num = (long)pointer;
 
     unsigned long num_copy = num, len = 0, is_x = num != 0 && data.flags[3];
-    if (num_copy == 0) len = 1;
-    while (num_copy != 0) {
-        num_copy /= 16;
-        len++;
-    }
+    len = get_num_len(num_copy, 16);
     len = data.precision > len ? data.precision : len;
     if (pointer == s21_NULL) {
         len = 5;
     }
     char string_abs[len]; int first = 0;
+    num_to_string(string_abs, len, num, 16, data.spec);
     if (data.flags[1] || data.flags[2]) first = 1;
-
-    for (int i = len - 1; i >= 0; i--) {
-        if (num % 16 < 10) string_abs[i] = '0' + (num % 16); 
-        else string_abs[i] = 'a' + (num % 16 - 10);
-        num /= 16;
-    }
 
     if (pointer == s21_NULL) {
         char *st = "(nil)";
@@ -459,9 +423,7 @@ void process_p(input_value data, char **string, int *idx, va_list *list) {
             (*string)[(*idx)++] = string_abs[i];
         }
         int add_len = data.width - len - is_x * 2 - first;
-        for (int i = 0; i < add_len; i++) {
-            (*string)[(*idx)++] = ' ';
-        }
+        print_symbols(string, idx, add_len, ' ');
     } else {
         if (data.flags[4]) {
             if (pointer != s21_NULL) {
@@ -471,17 +433,13 @@ void process_p(input_value data, char **string, int *idx, va_list *list) {
                 (*string)[(*idx)++] = 'x';
             }
             int add_len = data.width - len - is_x * 2 - first;
-            for (int i = 0; i < add_len; i++) {
-                (*string)[(*idx)++] = '0';
-            }
+            print_symbols(string, idx, add_len, '0');
             for (int i = 0; i < len; i++) {
                 (*string)[(*idx)++] = string_abs[i];
             }
         } else {
             int add_len = data.width - len - is_x * 2 - first;
-            for (int i = 0; i < add_len; i++) {
-                (*string)[(*idx)++] = ' ';
-            }
+            print_symbols(string, idx, add_len, ' ');
             if (pointer != s21_NULL) {
                 if (data.flags[1]) (*string)[(*idx)++] = '+';
                 else if (data.flags[2]) (*string)[(*idx)++] = ' ';
@@ -494,7 +452,25 @@ void process_p(input_value data, char **string, int *idx, va_list *list) {
         }
     }
 }
-void process_n(input_value data, char **string, int *idx, va_list *list) {}
+
+void process_n(input_value data, char **string, int *idx, va_list *list) {
+    int *ptr = va_arg(*list, int *);
+    *ptr = *idx;
+}
+
+void print_symbols(char **string, int *idx, int len, char symbol) {
+    for (int i = 0; i < len; i++)
+        (*string)[(*idx)++] = symbol;
+}
+
+int get_num_len(unsigned long num, int base) {
+    int len = num == 0;
+    while (num) {
+        len++;
+        num /= base;
+    }
+    return len;
+}
 
 void _print_input_value(input_value tmp) {
     fprintf(stderr, "%s = %c\n", DUMP(tmp.spec), tmp.spec);
@@ -504,4 +480,15 @@ void _print_input_value(input_value tmp) {
     fprintf(stderr, "%s = %d\n", DUMP(tmp.is_star_width), tmp.is_star_width);
     fprintf(stderr, "%s = %d\n", DUMP(tmp.is_star_precision), tmp.is_star_precision);
     fprintf(stderr, "%s = %d\n", DUMP(tmp.string_len), tmp.string_len);
+}
+
+void num_to_string(char *string, int len, unsigned long num, int base, char spec) {
+    char alpha = spec == 'X' ? 'A' : 'a';
+    for (int i = len - 1; i >= 0; i--) {
+        if (num % base < 10)
+            string[i] = '0' + (num % base); 
+        else
+            string[i] = alpha + (num % base - 10); 
+        num /= base;
+    }
 }
