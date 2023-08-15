@@ -284,7 +284,94 @@ void process_u(input_value data, char **string, int *idx, va_list *list) {
 }
 
 void process_e(input_value data, char **string, int *idx, va_list *list) {}
-void process_f(input_value data, char **string, int *idx, va_list *list) {}
+
+void process_f(input_value data, char **string, int *idx, va_list *list) {
+    long double num;
+    if (data.len_description == 'L')
+        num = va_arg(*list, long double);
+    else 
+        num = va_arg(*list, double);
+    
+    if (!data._is_precision)
+        data.precision = 6;
+
+    char first_char = 0;
+    int is_negative = (long)num < 0;
+    if (is_negative) {
+        num *= -1;
+        first_char = '-';
+    } else if (data.flags[1])
+        first_char = '+';
+    else if (data.flags[2])
+        first_char = ' ';
+    int is_first = first_char != 0;
+
+    char string_fract[data.precision];
+    long double n1 = num - (long)num, n2 = 1;
+    for (int i = 0; i < data.precision; i++) {
+        n1 *= 10.0;
+        long a = n1;
+        n1 -= a;
+        n2 /= 10;
+    }
+    if (n1 >= 0.5) num += n2;
+    unsigned long num_copy = (long int)num, len = 0;
+    num -= (long)num;
+    len = get_num_len(num_copy, 10);
+    char string_dec[len];
+    num_to_string(string_dec, len, num_copy, 10, data.spec);
+    for (int i = 0; i < data.precision; i++) {
+        num *= 10.0;
+        long a = num;
+        string_fract[i] = a % 10 + '0';
+        num -= a;
+    }
+    int dot = data.precision != 0;
+
+    char string_abs[len + data.precision + dot];
+
+    for (int i = 0; i < len; i++) {
+        string_abs[i] = string_dec[i];
+    }
+    if (dot)
+        string_abs[len] = '.';
+    for (int i = 0; i < data.precision; i++) {
+        string_abs[i + len + 1] = string_fract[i];
+    }
+    len = len + data.precision + dot;
+
+    if (data.flags[0]) {
+        if (is_first) {
+            (*string)[(*idx)++] = first_char;
+        }
+        for (int i = 0; i < len; i++) {
+            (*string)[(*idx)++] = string_abs[i];
+        }
+        int add_len = data.width - len - is_first;
+        print_symbols(string, idx, add_len, ' ');
+    } else {
+        if (data.flags[4]) {
+            if (is_first) {
+                (*string)[(*idx)++] = first_char;
+            }
+            int add_len = data.width - len - is_first;
+            print_symbols(string, idx, add_len, '0');
+            for (int i = 0; i < len; i++) {
+                (*string)[(*idx)++] = string_abs[i];
+            }
+        } else {
+            int add_len = data.width - len - is_first;
+            print_symbols(string, idx, add_len, ' ');
+            if (is_first) {
+                (*string)[(*idx)++] = first_char;
+            }
+            for (int i = 0; i < len; i++) {
+                (*string)[(*idx)++] = string_abs[i];
+            }
+        }
+    }
+}
+
 void process_g(input_value data, char **string, int *idx, va_list *list) {}
 
 void process_o(input_value data, char **string, int *idx, va_list *list) {
