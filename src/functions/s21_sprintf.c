@@ -1,6 +1,4 @@
-#include <stdarg.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include "../s21_string.h"
 
 #define SPECS_LEN 16

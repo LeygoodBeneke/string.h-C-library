@@ -4,7 +4,13 @@
 #define s21_NULL 0
 #endif
 
+#include <ctype.h>
+#include <locale.h>
+#include <math.h>
 #include <stdarg.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <wchar.h>
 
 
 typedef long unsigned s21_size_t;
@@ -24,6 +30,7 @@ char *s21_strpbrk(const char *str1, const char *str2);
 char *s21_strrchr(const char *str, int c);
 char *s21_strstr(const char *haystack, const char *needle);
 char *s21_strtok(char *str, const char *delim);
+char *s21_strcpy(char *dest, const char *src);
 
 int s21_sscanf(const char *str, const char *format, ...);
 int s21_sprintf(char *str, const char *format, ...);

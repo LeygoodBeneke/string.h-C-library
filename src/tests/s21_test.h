@@ -36,5 +36,6 @@ Suite *test_sprintf_s();
 Suite *test_sprintf_u();
 Suite *test_sprintf_percent();
 Suite *test_sprintf();
+Suite *test_sscanf();
 
 #endif  // SRC_S21_TEST_H

@@ -12,7 +12,7 @@ s21_string.a: s21_string.o s21_sprintf.o
 clean:
 	rm -rf *.a *.o *.out *.html *.css *.gcno *.gcov *.gcda s21_test
 test: clean
-	gcc $(FLAGS) $(COVERAGE) -o s21_test tests/*.c functions/s21_string.c functions/s21_sprintf.c -lcheck
+	gcc $(FLAGS) $(COVERAGE) -o s21_test tests/*.c functions/s21_string.c functions/s21_sprintf.c functions/s21_sscanf.c -lcheck -lm
 add_coverage_flag:
 	$(eval FLAGS += --coverage)
 gcov_report: add_coverage_flag test

@@ -28,7 +28,7 @@ START_TEST(test3_sprintf_d) {
   char str1[100];
   char str2[100];
   char *str3 = "%.5d %.5d %.5d %.5d %.5d %.5d";
-  int a = 1, b = -1, c = 0;
+  int a = 1, b = -1, c = 1;
   int d = 65, e = -65, f = 255;
   ck_assert_int_eq(s21_sprintf(str1, str3, a, b, c, d, e, f),
                    sprintf(str2, str3, a, b, c, d, e, f));

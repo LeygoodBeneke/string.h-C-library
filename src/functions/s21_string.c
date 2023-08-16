@@ -1,9 +1,5 @@
 #include "../s21_string.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
-
 #ifdef __APPLE__
 #define MAX_ERROR 107
 char *errors[107] = {"Undefined error: 0",
@@ -461,4 +457,17 @@ void *s21_trim(const char *src, const char *trim_chars) {
   }
   return_string[right_idx - left_idx + 1] = 0;
   return return_string;
+}
+
+char *s21_strcpy(char *dest, const char *src) {
+  char *cpindest = dest;
+  if (src != s21_NULL && dest != s21_NULL) {
+    while (*src != '\0') {
+      *dest = *src;
+      dest++;
+      src++;
+    }
+    *dest = '\0';
+  }
+  return cpindest;
 }
