@@ -492,8 +492,6 @@ void process_g(input_value data, char **string, int *idx, va_list *list) {
     data.spec = 'e';
     process_e(data, &second, &sidx, s);
 
-    printf("STRINGS: %s %s\n%d %d\n", first, second, fidx, sidx);
-
     if (fidx < sidx) {
         for (int i = 0; i < fidx; i++) {
             (*string)[(*idx)++] = first[i];

@@ -1,4 +1,4 @@
-FLAGS=-Wall -Werror -Wextra -std=c11
+FLAGS= -std=c11 -Wall -Werror -Wextra
 COVERAGE=
 
 all: clean s21_string.a
