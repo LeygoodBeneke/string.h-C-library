@@ -546,8 +546,6 @@ long double s21_strtold(char *str, char **strend) {
   return (isnan(a) || isinf(a)) ? a : (a * sign / decplace) * powl(10, b);
 }
 
-
-
 s21_size_t s21_strspn(const char *str1, const char *str2) {
   s21_size_t lenght = 0;
   const char *sym;

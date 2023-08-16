@@ -33,15 +33,13 @@ int main() {
                      // test_to_upper(),
                      // test_insert(),
                      // test_trim(),
-                        test_sprintf_c(),
-                        test_sprintf_d(),
+                     test_sprintf_c(), test_sprintf_d(),
                      // test_sprintf_f(),
                      // test_sprintf_s(),
-                        test_sprintf_u(),
+                     test_sprintf_u(),
                      // test_sprintf_percent(),
-                      //  test_sprintf(),
-                        test_sscanf(),
-                     NULL};
+                     //  test_sprintf(),
+                     test_sscanf(), NULL};
 
   for (int i = 0; suites[i] != NULL; i++) {
     print_info(suites[i]);

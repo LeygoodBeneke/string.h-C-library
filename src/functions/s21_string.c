@@ -326,7 +326,8 @@ s21_size_t s21_strcspn(const char *str1, const char *str2) {
 char *s21_strerror(int errnum) {
   static char unknown_error[1500];
   s21_sprintf(unknown_error, "Unknown error: %d", errnum);
-  return (errnum >= 0 && errnum <= MAX_ERROR) ? (char *)errors[errnum] : unknown_error;
+  return (errnum >= 0 && errnum <= MAX_ERROR) ? (char *)errors[errnum]
+                                              : unknown_error;
 }
 char *s21_strtok(char *str, const char *delim) {
   static char *result = s21_NULL;
