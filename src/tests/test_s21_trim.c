@@ -167,6 +167,71 @@ START_TEST(null_ptr_trim_chars) {
         free(got);
 }
 END_TEST
+
+START_TEST(trim_1) {
+    char *str1 = "Hello World";
+    char *str2 = "H";
+    char *str3 = (char *)s21_trim(str1, str2);
+    ck_assert_str_eq(str3, "ello World");
+    free(str3);
+} END_TEST
+
+START_TEST(trim_2) {
+    char *str1 = "Hello World";
+    char *str2 = "Hedl";
+    char *str3 = (char *)s21_trim(str1, str2);
+    ck_assert_str_eq(str3, "o Wor");
+    free(str3);
+} END_TEST
+
+START_TEST(trim_3) {
+    char *str1 = "";
+    char *str2 = "";
+    char *str3 = (char *)s21_trim(str1, str2);
+    ck_assert_str_eq(str3, "");
+    free(str3);
+} END_TEST
+
+START_TEST(trim_4) {
+    char *str = "empty";
+    char *str2 = "empty";
+    char *str3 = (char *)s21_trim(str, str2);
+    ck_assert_str_eq(str3, "");
+    free(str3);
+} END_TEST
+
+START_TEST(trim_5) {
+    char *str = NULL;
+    char *str2 = NULL;
+    char *str3 = (char *)s21_trim(str, str2);
+    ck_assert_ptr_eq(str3, NULL);
+    free(str3);
+} END_TEST
+
+START_TEST(trim_6) {
+    char *str = "";
+    char *str2 = NULL;
+    char *str3 = (char *)s21_trim(str, str2);
+    ck_assert_ptr_eq(str3, NULL);
+    free(str3);
+} END_TEST
+
+START_TEST(trim_7) {
+    char *str = NULL;
+    char *str2 = "          ";
+    char *str3 = (char *)s21_trim(str, str2);
+    ck_assert_ptr_eq(str3, NULL);
+    free(str3);
+} END_TEST
+
+START_TEST(trim_8) {
+    char *str = "empty";
+    char *str2 = "t";
+    char *str3 = (char *)s21_trim(str, str2);
+    ck_assert_str_ne(str3, "em");
+    free(str3);
+} END_TEST
+
 Suite* test_trim() {
   Suite* suite = suite_create("s21_trim");
   TCase* tcase = tcase_create("s21_trim_tcase");
@@ -184,6 +249,15 @@ Suite* test_trim() {
     tcase_add_test(tcase, trim_test5);
     tcase_add_test(tcase, empty_spaces);
     tcase_add_test(tcase, null_ptr_trim_chars);
+
+    tcase_add_test(tcase, trim_1);
+    tcase_add_test(tcase, trim_2);
+    tcase_add_test(tcase, trim_3);
+    tcase_add_test(tcase, trim_4);
+    tcase_add_test(tcase, trim_5);
+    tcase_add_test(tcase, trim_6);
+    tcase_add_test(tcase, trim_7);
+    tcase_add_test(tcase, trim_8);
 
   suite_add_tcase(suite, tcase);
   return suite;
