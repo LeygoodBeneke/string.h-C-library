@@ -4,15 +4,13 @@ COVERAGE=
 all: clean s21_string.a
 deafult: all
 s21_string.o:
-	gcc $(FLAGS) -c functions/s21_string.c
-s21_sprintf.o:
-	gcc $(FLAGS) -c functions/s21_sprintf.c
+	gcc $(FLAGS) -c functions/*.c
 s21_string.a: s21_string.o s21_sprintf.o
-	ar cr s21_string.a functions/s21_string.o functions/s21_sprintf.o
+	ar cr s21_string.a *.o
 clean:
 	rm -rf *.a *.o *.out *.html *.css *.gcno *.gcov *.gcda s21_test
 test: clean
-	gcc $(FLAGS) $(COVERAGE) -o s21_test tests/*.c functions/s21_string.c functions/s21_sprintf.c functions/s21_sscanf.c -lcheck -lm
+	gcc $(FLAGS) $(COVERAGE) -o s21_test tests/*.c functions/*.c -lcheck -lm
 add_coverage_flag:
 	$(eval FLAGS += --coverage)
 gcov_report: add_coverage_flag test

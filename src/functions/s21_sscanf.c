@@ -31,6 +31,7 @@ long double s21_strtold(char *str, char **strend);
 float s21_strtof(char *str, char **strend);
 double s21_strtod(char *str, char **strend);
 s21_size_t s21_strspn(const char *str1, const char *str2);
+char *s21_strcpy(char *dest, const char *src);
 
 int s21_sscanf(const char *str, const char *format, ...) {
   int res = 0;
@@ -69,7 +70,7 @@ int caseInt(va_list args, flags *fl, char **strc, int sys) {
   int res = 0;
   char *strend;
   numericBuff(strc, fl);
-  if (s21_strtol(*strc, s21_NULL, sys) ||
+  if (s21_strtol(*strc, S21_NULL, sys) ||
       *(*strc + s21_strspn(*strc, "\n\t \f\x0B\r+-")) == '0') {
     if (!fl->supr) {
       res++;
@@ -95,10 +96,10 @@ int caseUns(va_list args, flags *fl, char **strc, int sys) {
   int res = 0;
   char *strend;
   numericBuff(strc, fl);
-  if (s21_strtoul(*strc, s21_NULL, sys) ||
+  if (s21_strtoul(*strc, S21_NULL, sys) ||
       *(*strc + s21_strspn(*strc, "\n\t \f\x0B\r+")) == '0') {
     if (!fl->supr) {
-      if (s21_strtoul(*strc, s21_NULL, sys) || **strc == '0') res++;
+      if (s21_strtoul(*strc, S21_NULL, sys) || **strc == '0') res++;
       if (fl->length == 1)
         *(short unsigned *)va_arg(args, void *) =
             s21_strtoul(*strc, &strend, sys);
@@ -123,8 +124,8 @@ int caseFlo(va_list args, flags *fl, char **strc) {
   int res = 0;
   char *strend;
   numericBuff(strc, fl);
-  if (fabs(s21_strtod(*strc, s21_NULL)) >= 1e-100 ||
-      isnan(s21_strtod(*strc, s21_NULL)) ||
+  if (fabs(s21_strtod(*strc, S21_NULL)) >= 1e-100 ||
+      isnan(s21_strtod(*strc, S21_NULL)) ||
       *(*strc + s21_strspn(*strc, "\n\t \f\x0B\r+-")) == '0') {
     if (!fl->supr) {
       res++;
@@ -149,11 +150,11 @@ int caseFlo(va_list args, flags *fl, char **strc) {
 int casePtr(va_list args, flags *fl, char **strc) {
   int res = 0;
   char *strend;
-  if (s21_strtoul(*strc, s21_NULL, 16) ||
+  if (s21_strtoul(*strc, S21_NULL, 16) ||
       *(*strc + s21_strspn(*strc, "\n\t \f\x0B\r+-")) == '0') {
     numericBuff(strc, fl);
     if (!fl->supr) {
-      if (s21_strtoul(*strc, s21_NULL, 16) || **strc == '0') res++;
+      if (s21_strtoul(*strc, S21_NULL, 16) || **strc == '0') res++;
       *(void **)va_arg(args, void **) = (void *)s21_strtoul(*strc, &strend, 16);
     } else {
       s21_strtoul(*strc, &strend, 16);
@@ -555,4 +556,18 @@ s21_size_t s21_strspn(const char *str1, const char *str2) {
     if (!*sym) break;
   }
   return lenght;
+}
+
+
+char *s21_strcpy(char *dest, const char *src) {
+  char *cpindest = dest;
+  if (src != S21_NULL && dest != S21_NULL) {
+    while (*src != '\0') {
+      *dest = *src;
+      dest++;
+      src++;
+    }
+    *dest = '\0';
+  }
+  return cpindest;
 }

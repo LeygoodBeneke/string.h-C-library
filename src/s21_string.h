@@ -1,7 +1,7 @@
 #ifndef S21_STRING
 
-#ifndef s21_NULL
-#define s21_NULL 0
+#ifndef S21_NULL
+#define S21_NULL 0
 #endif
 
 #include <ctype.h>

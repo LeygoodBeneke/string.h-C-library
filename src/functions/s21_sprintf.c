@@ -613,7 +613,7 @@ void process_p(input_value data, char **string, int *idx, va_list *list) {
   unsigned long num_copy = num, is_x = num != 0 && data.flags[3];
   int len = get_num_len(num_copy, 16);
   len = data.precision > len ? data.precision : len;
-  if (pointer == s21_NULL) {
+  if (pointer == S21_NULL) {
     len = 5;
   }
   char string_abs[len];
@@ -621,7 +621,7 @@ void process_p(input_value data, char **string, int *idx, va_list *list) {
   num_to_string(string_abs, len, num, 16, data.spec);
   if (data.flags[1] || data.flags[2]) first = 1;
 
-  if (pointer == s21_NULL) {
+  if (pointer == S21_NULL) {
     char *st = "(nil)";
     first = 0;
     for (int i = 0; i < 5; i++) string_abs[i] = st[i];
@@ -629,7 +629,7 @@ void process_p(input_value data, char **string, int *idx, va_list *list) {
     is_x = 1;
 
   if (data.flags[0]) {
-    if (pointer != s21_NULL) {
+    if (pointer != S21_NULL) {
       if (data.flags[1])
         (*string)[(*idx)++] = '+';
       else if (data.flags[2])
@@ -645,7 +645,7 @@ void process_p(input_value data, char **string, int *idx, va_list *list) {
     print_symbols(string, idx, add_len, ' ');
   } else {
     if (data.flags[4]) {
-      if (pointer != s21_NULL) {
+      if (pointer != S21_NULL) {
         if (data.flags[1])
           (*string)[(*idx)++] = '+';
         else if (data.flags[2])
@@ -661,7 +661,7 @@ void process_p(input_value data, char **string, int *idx, va_list *list) {
     } else {
       int add_len = data.width - len - is_x * 2 - first;
       print_symbols(string, idx, add_len, ' ');
-      if (pointer != s21_NULL) {
+      if (pointer != S21_NULL) {
         if (data.flags[1])
           (*string)[(*idx)++] = '+';
         else if (data.flags[2])
