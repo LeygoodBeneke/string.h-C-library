@@ -75,7 +75,7 @@ END_TEST
 START_TEST(test9_insert) {
   char s1[] = "wtf";
   char *s3 = NULL;
-  char *s4 = NULL;
+  char *s4 = "wtf";
   s21_size_t num = 0;
   ck_assert_pstr_eq(s4, s21_insert(s1, s3, num));
 }
@@ -84,7 +84,7 @@ END_TEST
 START_TEST(test10_insert) {
   char s1[] = "";
   char *s3 = NULL;
-  char *s4 = NULL;
+  char *s4 = "";
   s21_size_t num = 0;
   ck_assert_pstr_eq(s4, s21_insert(s1, s3, num));
 }

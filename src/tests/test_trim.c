@@ -13,7 +13,7 @@ END_TEST
 START_TEST(test2_trim) {
   char s1[30] = "";
   char s3[] = "";
-  char *s4 = NULL;
+  char *s4 = "";
   char *ptr = (char *)s21_trim(s1, s3);
   ck_assert_pstr_eq(s4, ptr);
   free(ptr);
@@ -72,7 +72,7 @@ END_TEST
 START_TEST(test8_trim) {
   char s1[30] = "";
   char s3[] = "";
-  char *s4 = NULL;
+  char *s4 = "";
   char *ptr = (char *)s21_trim(s1, s3);
   ck_assert_pstr_eq(s4, ptr);
   free(ptr);
@@ -82,7 +82,7 @@ END_TEST
 START_TEST(test9_trim) {
   char s1[30] = " wtf ";
   char *s3 = NULL;
-  char *s4 = " wtf ";
+  char *s4 = "wtf";
   char *ptr = (char *)s21_trim(s1, s3);
   ck_assert_pstr_eq(s4, ptr);
   free(ptr);
@@ -92,7 +92,7 @@ END_TEST
 START_TEST(test10_trim) {
   char s1[] = " wtf ";
   char *s3 = "";
-  char *s4 = " wtf ";
+  char *s4 = "wtf";
   char *ptr = (char *)s21_trim(s1, s3);
   ck_assert_pstr_eq(s4, ptr);
   free(ptr);

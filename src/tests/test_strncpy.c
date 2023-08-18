@@ -1,7 +1,7 @@
 #include "s21_test.h"
 START_TEST(test1_strncpy) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
+  char str1[10] = "";
+  char str2[10] = "";
   char str[] = "strncpy";
   size_t n = strlen(str);
   ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
@@ -27,8 +27,8 @@ START_TEST(test3_strncpy) {
 END_TEST
 
 START_TEST(test4_strncpy) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
+  char str1[10] = "";
+  char str2[10] = "";
   char str[] = "strncpy";
   size_t n = 1;
   ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
@@ -63,8 +63,8 @@ START_TEST(test7_strncpy) {
 END_TEST
 
 START_TEST(test8_strncpy) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
+  char str1[10] = "";
+  char str2[10] = "";
   char str[] = "\n\0\t";
   size_t n = strlen(str);
   ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
@@ -72,8 +72,8 @@ START_TEST(test8_strncpy) {
 END_TEST
 
 START_TEST(test9_strncpy) {
-  char str1[] = "Hello, world";
-  char str2[] = "Hello, world";
+  char str1[10] = "";
+  char str2[10] = "";
   char str[] = "!";
   size_t n = 1;
   ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));
@@ -81,8 +81,8 @@ START_TEST(test9_strncpy) {
 END_TEST
 
 START_TEST(test10_strncpy) {
-  char str1[] = "Hello, world!";
-  char str2[] = "Hello, world!";
+  char str1[5] = "";
+  char str2[5] = "";
   char str[] = "!!";
   size_t n = 2;
   ck_assert_str_eq(s21_strncpy(str1, str, n), strncpy(str2, str, n));

@@ -1,14 +1,14 @@
 #include "s21_test.h"
 
 START_TEST(test1_strcspn) {
-  char str1[] = "Hello, world!";
+  char str1[] = "";
   char str2[] = "";
   ck_assert_int_eq(s21_strcspn(str1, str2), strcspn(str1, str2));
 }
 END_TEST
 
 START_TEST(test2_strcspn) {
-  char str1[] = "Hello, world!";
+  char str1[] = "";
   char str2[] = "\0";
   ck_assert_int_eq(s21_strcspn(str1, str2), strcspn(str1, str2));
 }

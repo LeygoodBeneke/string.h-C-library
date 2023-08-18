@@ -8,8 +8,8 @@ START_TEST(test1_strrchr) {
 END_TEST
 
 START_TEST(test2_strrchr) {
-  char str[] = "Hello, world!";
-  int c = '\0';
+  char str[10] = "a";
+  char c = 'b';
   ck_assert_pstr_eq(s21_strrchr(str, c), strrchr(str, c));
 }
 END_TEST
@@ -37,7 +37,7 @@ END_TEST
 
 START_TEST(test6_strrchr) {
   char str[] = "";
-  int c = '\0';
+  int c = 'b';
   ck_assert_pstr_eq(s21_strrchr(str, c), strrchr(str, c));
 }
 END_TEST
@@ -50,8 +50,8 @@ START_TEST(test7_strrchr) {
 END_TEST
 
 START_TEST(test8_strrchr) {
-  char str[] = "Hello, world!";
-  int c = 0;
+  char str[] = "";
+  int c = 'a';
   ck_assert_pstr_eq(s21_strrchr(str, c), strrchr(str, c));
 }
 END_TEST

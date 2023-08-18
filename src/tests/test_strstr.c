@@ -57,8 +57,8 @@ START_TEST(test8_strstr) {
 END_TEST
 
 START_TEST(test9_strstr) {
-  char str1[] = "";
-  char str2[] = "";
+  char str1[] = "w";
+  char str2[] = "w";
   ck_assert_pstr_eq(s21_strstr(str1, str2), strstr(str1, str2));
 }
 END_TEST

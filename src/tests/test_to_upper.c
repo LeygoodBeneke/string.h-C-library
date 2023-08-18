@@ -47,7 +47,7 @@ END_TEST
 
 START_TEST(test6_to_upper) {
   char str[] = "";
-  char *res = NULL;
+  char *res = "";
   char *ptr = (char *)s21_to_upper(str);
   ck_assert_pstr_eq(ptr, res);
   free(ptr);
