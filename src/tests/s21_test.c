@@ -40,7 +40,8 @@ int main() {
                      test_sprintf_u(),
                      test_sprintf_percent(),
                      test_sprintf(),
-                     test_sscanf(), NULL};
+                     test_sscanf(),
+                     NULL};
 
   for (int i = 0; suites[i] != NULL; i++) {
     print_info(suites[i]);

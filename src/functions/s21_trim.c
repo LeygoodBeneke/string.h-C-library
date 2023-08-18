@@ -9,10 +9,10 @@ void *s21_trim(const char *src, const char *trim_chars) {
       while (*src && s21_strchr(trim_chars, *src)) {
         src++;
         len--;
-    }
+      }
       if (len) {
         s21_size_t j = 0, k = len - 1;
-       while (j < s21_strlen(trim_chars)) {
+        while (j < s21_strlen(trim_chars)) {
           if (src[k] == trim_chars[j]) {
             k--;
             len--;

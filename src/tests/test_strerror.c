@@ -1,7 +1,7 @@
 #include "s21_test.h"
 
 START_TEST(test1_strerror) {
-  for (int i = 0; i < 107; i++) {
+  for (int i = -1; i < 200; i++) {
     ck_assert_str_eq(s21_strerror(i), strerror(i));
   }
 }

@@ -1,15 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <wchar.h>
 
 #include "../s21_string.h"
 
 #define SPECS_LEN 16
 #define FLAGS_LEN 5
 #define DESCRIPTION_LEN 3
-const char specs[SPECS_LEN] = "csdiueEfgGoxXpn%";
-const char flags[FLAGS_LEN] = "-+ #0";
-const char desc[DESCRIPTION_LEN] = "hlL";
-
-#define DUMP(varname) (#varname)
 
 typedef struct {
   char spec;
@@ -28,7 +25,6 @@ typedef struct {
 } funcs_processing;
 
 void write_data(char *str, input_value *dest);
-void _print_input_value(input_value tmp);
 char *num_proccessing(char *string, int *value);
 char *specs_check(char *string, char *value, int len, char *spec);
 char *star_check(char *string, int *value);
@@ -56,6 +52,7 @@ void process_n(input_value data, char **string, int *idx, va_list *list);
 void process_t(input_value data, char **string, int *idx, va_list *list);
 
 int s21_sprintf(char *str, const char *format, ...) {
+  setlocale(LC_ALL, "en_US.UTF-16");
   va_list string_list;
   va_start(string_list, format);
   int idx = 0, read = 0;
@@ -68,7 +65,6 @@ int s21_sprintf(char *str, const char *format, ...) {
     } else {
       input_value data = {};
       write_data(ch + 1, &data);
-      // _print_input_value(data);
       proccess_input_value(&str, &idx, data, &string_list);
       read = 0;
       if (!data.spec) str[idx++] = '%';
@@ -81,6 +77,8 @@ int s21_sprintf(char *str, const char *format, ...) {
 }
 
 void write_data(char *str, input_value *dest) {
+  const char flags[FLAGS_LEN] = "-+ #0";
+  const char desc[DESCRIPTION_LEN] = "hlL";
   int flags_flag = 1;
   char *str_copy = str;
   while (flags_flag && str_copy) {
@@ -106,6 +104,7 @@ void write_data(char *str, input_value *dest) {
   if (dest->len_description == 'l')
     str_copy = specs_check(str_copy, &dest->len_description, DESCRIPTION_LEN,
                            (char *)desc);
+  char specs[SPECS_LEN] = "csdiueEfgGoxXpn%";
   str_copy = specs_check(str_copy, &dest->spec, SPECS_LEN, (char *)specs);
   if (str && str_copy) dest->string_len = str_copy - str + 1;
   if (!dest->spec) dest->string_len = 1;
@@ -158,9 +157,7 @@ void init_call_back(funcs_processing *fp) {
 
 void proccess_input_value(char **string, int *idx, input_value data,
                           va_list *list) {
-  if (is_valid_spec(data.spec) == 0) {
-    printf("ERROR");
-  }
+  const char specs[SPECS_LEN] = "csdiueEfgGoxXpn%";
   funcs_processing fp;
   init_call_back(&fp);
 
@@ -178,6 +175,7 @@ void proccess_input_value(char **string, int *idx, input_value data,
 
 int is_valid_spec(char spec) {
   int flag = 0;
+  const char specs[SPECS_LEN] = "csdiueEfgGoxXpn%";
   for (int i = 0; i < SPECS_LEN; i++)
     if (spec == specs[i]) {
       flag = 1;
@@ -188,14 +186,23 @@ int is_valid_spec(char spec) {
 
 void process_c(input_value data, char **string, int *idx, va_list *list) {
   data.width--;
-  if (data.flags[0]) (*string)[(*idx)++] = va_arg(*list, int);
-  print_symbols(string, idx, data.width, ' ');
-  if (!data.flags[0]) (*string)[(*idx)++] = va_arg(*list, int);
+  int c = 0;
+  wchar_t long_char = 0;
+
+  if (data.len_description == 'l')
+    long_char = va_arg(*list, wchar_t);
+  else
+    c = va_arg(*list, int);
+  if (!data.flags[0]) print_symbols(string, idx, data.width, ' ');
+
+  if (data.len_description == 'l') c = wctob(long_char);
+  (*string)[(*idx)++] = c;
+  if (data.flags[0]) print_symbols(string, idx, data.width, ' ');
 }
 
 void process_s(input_value data, char **string, int *idx, va_list *list) {
   char *str = S21_NULL;
-  wchar_t* wstr = S21_NULL;
+  wchar_t *wstr = S21_NULL;
   int len;
   if (data.len_description != 'l') {
     str = va_arg(*list, char *);
@@ -216,8 +223,7 @@ void process_s(input_value data, char **string, int *idx, va_list *list) {
   }
 
   if (data.flags[0]) print_symbols(string, idx, data.width, ' ');
-  if (data.len_description == 'l')
-      free(str);
+  if (data.len_description == 'l') free(str);
 }
 
 void process_d(input_value data, char **string, int *idx, va_list *list) {
@@ -710,17 +716,6 @@ int get_num_len(unsigned long num, int base) {
     num /= base;
   }
   return len;
-}
-
-void _print_input_value(input_value tmp) {
-  fprintf(stderr, "%s = %c\n", DUMP(tmp.spec), tmp.spec);
-  fprintf(stderr, "%s = %d\n", DUMP(tmp.width), tmp.width);
-  fprintf(stderr, "%s = %d\n", DUMP(tmp.precision), tmp.precision);
-  fprintf(stderr, "%s = %c\n", DUMP(tmp.len_description), tmp.len_description);
-  fprintf(stderr, "%s = %d\n", DUMP(tmp.is_star_width), tmp.is_star_width);
-  fprintf(stderr, "%s = %d\n", DUMP(tmp.is_star_precision),
-          tmp.is_star_precision);
-  fprintf(stderr, "%s = %d\n", DUMP(tmp.string_len), tmp.string_len);
 }
 
 void num_to_string(char *string, int len, unsigned long num, int base,

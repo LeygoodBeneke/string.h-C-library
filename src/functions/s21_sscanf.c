@@ -558,7 +558,6 @@ s21_size_t s21_strspn(const char *str1, const char *str2) {
   return lenght;
 }
 
-
 char *s21_strcpy(char *dest, const char *src) {
   char *cpindest = dest;
   if (src != S21_NULL && dest != S21_NULL) {
