@@ -194,14 +194,30 @@ void process_c(input_value data, char **string, int *idx, va_list *list) {
 }
 
 void process_s(input_value data, char **string, int *idx, va_list *list) {
-  char *str = va_arg(*list, char *);
-  int len = s21_strlen(str);
+  char *str = S21_NULL;
+  wchar_t* wstr = S21_NULL;
+  int len;
+  if (data.len_description != 'l') {
+    str = va_arg(*list, char *);
+    len = s21_strlen(str);
+  } else {
+    wstr = va_arg(*list, wchar_t *);
+    int bytes = sizeof(wstr[0]);
+    len = wcslen(wstr);
+    str = malloc(len * bytes);
+    wcstombs(str, wstr, len * bytes);
+  }
   if (data._is_precision)
     if (data.precision < len) len = data.precision;
   data.width -= len;
   if (!data.flags[0]) print_symbols(string, idx, data.width, ' ');
-  for (int i = 0; i < len; i++) (*string)[(*idx)++] = str[i];
+  for (int i = 0; i < len; i++) {
+    if (str[i] >= 0) (*string)[(*idx)++] = str[i];
+  }
+
   if (data.flags[0]) print_symbols(string, idx, data.width, ' ');
+  if (data.len_description == 'l')
+      free(str);
 }
 
 void process_d(input_value data, char **string, int *idx, va_list *list) {

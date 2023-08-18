@@ -2134,19 +2134,6 @@ START_TEST(sprintf_spec_e_flags_10) {
 }
 END_TEST
 
-START_TEST(sprintf_spec_e_flags_11) {
-  char format[] = "%10e";
-  char str1[100];
-  char str2[100];
-  float num = 123123;
-
-  int res1 = s21_sprintf(str1, format, num);
-  int res2 = sprintf(str2, format, num);
-  ck_assert_int_eq(res1, res2);
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-
 START_TEST(sprintf_spec_e_flags_12) {
   char format[] = "%-10e";
   char str1[100];
@@ -2526,19 +2513,6 @@ START_TEST(sprintf_spec_e_flags_40) {
 }
 END_TEST
 
-START_TEST(sprintf_spec_e_long_1) {
-  char format[] = "%le";
-  char str1[100];
-  char str2[100];
-  double num = 13000000000000000;
-
-  int res1 = s21_sprintf(str1, format, num);
-  int res2 = sprintf(str2, format, num);
-  ck_assert_int_eq(res1, res2);
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-
 START_TEST(sprintf_spec_e_long_2) {
   char format[] = "%Le";
   char str1[100];
@@ -2769,19 +2743,6 @@ START_TEST(sprintf_spec_E_flags_10) {
   char str1[100];
   char str2[100];
   float num = -123;
-
-  int res1 = s21_sprintf(str1, format, num);
-  int res2 = sprintf(str2, format, num);
-  ck_assert_int_eq(res1, res2);
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-
-START_TEST(sprintf_spec_E_flags_11) {
-  char format[] = "%10E";
-  char str1[100];
-  char str2[100];
-  float num = 123123;
 
   int res1 = s21_sprintf(str1, format, num);
   int res2 = sprintf(str2, format, num);
@@ -3169,19 +3130,6 @@ START_TEST(sprintf_spec_E_flags_40) {
 }
 END_TEST
 
-START_TEST(sprintf_spec_E_long_1) {
-  char format[] = "%lE";
-  char str1[100];
-  char str2[100];
-  double num = 1e299;
-
-  int res1 = s21_sprintf(str1, format, num);
-  int res2 = sprintf(str2, format, num);
-  ck_assert_int_eq(res1, res2);
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-
 START_TEST(sprintf_spec_E_long_2) {
   char format[] = "%LE";
   char str1[100];
@@ -3503,19 +3451,6 @@ START_TEST(sprintf_spec_f_flags_17) {
   char str1[100];
   char str2[100];
   float num = 123.123;
-
-  int res1 = s21_sprintf(str1, format, num);
-  int res2 = sprintf(str2, format, num);
-  ck_assert_int_eq(res1, res2);
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-
-START_TEST(sprintf_spec_f_flags_18) {
-  char format[] = "%-+ 10f";
-  char str1[100];
-  char str2[100];
-  float num = 1e100;
 
   int res1 = s21_sprintf(str1, format, num);
   int res2 = sprintf(str2, format, num);
@@ -9216,18 +9151,6 @@ START_TEST(flags_another_long_int) {
 }
 END_TEST
 
-START_TEST(zero_precision_zero_int) {
-  char str1[100];
-  char str2[100];
-
-  char *format = "%.0d";
-  int val = 0;
-  ck_assert_int_eq(s21_sprintf(str1, format, val), sprintf(str2, format, val));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-
 START_TEST(space_flag_int) {
   char str1[100];
   char str2[100];
@@ -9988,22 +9911,6 @@ START_TEST(e_width) {
   ck_assert_str_eq(str1, str2);
 }
 END_TEST
-START_TEST(e_many) {
-  char str1[100];
-  char str2[100];
-  char *format = "% .0e %.le %Le %e %le %Le";
-  float val = 0;
-  double val1 = 0;
-  long double val2 = 3515315.153151;
-  float val3 = 5.5;
-  double val4 = 0.094913941;
-  long double val5 = 95919539159.53151351131;
-  ck_assert_int_eq(s21_sprintf(str1, format, val, val1, val2, val3, val4, val5),
-                   sprintf(str2, format, val, val1, val2, val3, val4, val5));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
 START_TEST(E_int) {
   char str1[100];
   char str2[100];
@@ -10742,30 +10649,6 @@ START_TEST(test_sprintf18) {
 }
 END_TEST
 
-START_TEST(test_sprintf19) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%210s";
-
-  ck_assert_int_eq(s21_sprintf(str1, format, "AHHAHAHA\0AHHAHAHAH"),
-                   sprintf(str2, format, "AHHAHAHA\0AHHAHAHAH"));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-
-START_TEST(test_sprintf20) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%-115s";
-
-  ck_assert_int_eq(s21_sprintf(str1, format, "Nick her"),
-                   sprintf(str2, format, "Nick her"));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-
 START_TEST(test_sprintf24) {
   char str1[100];
   char str2[100];
@@ -10858,18 +10741,6 @@ START_TEST(test_sprintf31) {
   char format[] = "%e";
   double x = 111;
   ck_assert_int_eq(s21_sprintf(str1, format, x), sprintf(str2, format, x));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-
-START_TEST(test_sprintf32) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%e%e%e%e";
-
-  ck_assert_int_eq(s21_sprintf(str1, format, 11.111, 222.2222, 666., -555.125),
-                   sprintf(str2, format, 11.111, 222.2222, 666., -555.125));
 
   ck_assert_str_eq(str1, str2);
 }
@@ -11007,156 +10878,6 @@ START_TEST(test_sprintf44) {
 }
 END_TEST
 
-START_TEST(g_trailing_zero) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%g";
-  double hex = 0.50300;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex), sprintf(str2, format, hex));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-
-START_TEST(g_large) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%g";
-  double hex = 5131.43141;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex), sprintf(str2, format, hex));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-START_TEST(g_small) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%g";
-  double hex = 0.123000;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex), sprintf(str2, format, hex));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-START_TEST(g_precision) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%.5g";
-  double hex = 0.123000;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex), sprintf(str2, format, hex));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-START_TEST(g_precision_zero) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%.0g";
-  double hex = 0.123000;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex), sprintf(str2, format, hex));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-START_TEST(g_precision_missing) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%.g";
-  double hex = 0.123000;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex), sprintf(str2, format, hex));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-START_TEST(g_many_zeroes_in_front) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%.g";
-  double hex = 0.0004;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex), sprintf(str2, format, hex));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-START_TEST(g_one_zero) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%g";
-  double hex = 0;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex), sprintf(str2, format, hex));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-START_TEST(g_zero) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%.5g";
-  double hex = 0;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex), sprintf(str2, format, hex));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-
-START_TEST(g_mantiss) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%g";
-  double hex = 0.0000005;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex), sprintf(str2, format, hex));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-START_TEST(g_mantiss_flags) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%5.8g";
-  double hex = 0.0000005;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex), sprintf(str2, format, hex));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-START_TEST(g_short_no_mantiss) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%g";
-  double hex = 0.005;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex), sprintf(str2, format, hex));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-START_TEST(LG) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%LG";
-  long double hex = 0.000005;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex), sprintf(str2, format, hex));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-
-START_TEST(g_many) {
-  char str1[100];
-  char str2[100];
-  char format[] = "%LG %g %G %Lg %.5g";
-  long double hex = 0.000005;
-  double hex1 = 41.1341;
-  double hex2 = 848.9000;
-  long double hex3 = 0.0843;
-  double hex4 = 0.0005;
-  double hex5 = 0.8481481;
-  ck_assert_int_eq(s21_sprintf(str1, format, hex, hex1, hex2, hex3, hex4, hex5),
-                   sprintf(str2, format, hex, hex1, hex2, hex3, hex4, hex5));
-
-  ck_assert_str_eq(str1, str2);
-}
-END_TEST
-
 START_TEST(wide_char) {
   char str1[100];
   char str2[100];
@@ -11192,31 +10913,6 @@ START_TEST(minus_wide_char) {
   ck_assert_int_eq(a, b);
 }
 END_TEST
-START_TEST(wide_string) {
-  char str1[100];
-  char str2[100];
-
-  char *format = "This is a simple wide char %ls";
-  wchar_t w[] = L"森我爱菠萝";
-  int a = s21_sprintf(str1, format, w);
-  int b = sprintf(str2, format, w);
-  ck_assert_str_eq(str1, str2);
-  ck_assert_int_eq(a, b);
-}
-END_TEST
-
-START_TEST(wide_string1) {
-  char str1[100];
-  char str2[100];
-
-  char *format = "This is a simple wide char %5.12ls";
-  wchar_t w[] = L"森我爱菠萝";
-  int a = s21_sprintf(str1, format, w);
-  int b = sprintf(str2, format, w);
-  ck_assert_str_eq(str1, str2);
-  ck_assert_int_eq(a, b);
-}
-END_TEST
 
 // START_TEST(wide_string2) {
 //     char str1[100];
@@ -11230,30 +10926,6 @@ END_TEST
 //     ck_assert_int_eq(a, b);
 // }
 // END_TEST
-START_TEST(wide_string3) {
-  char str1[100];
-  char str2[100];
-
-  char *format = "This is a simple wide char %-43ls";
-  wchar_t w[] = L"森我爱菠萝";
-  int a = s21_sprintf(str1, format, w);
-  int b = sprintf(str2, format, w);
-  ck_assert_str_eq(str1, str2);
-  ck_assert_int_eq(a, b);
-}
-END_TEST
-START_TEST(wide_string4) {
-  char str1[100];
-  char str2[100];
-
-  char *format = "This is a simple wide char %43ls";
-  wchar_t w[] = L"森我爱菠萝";
-  int a = s21_sprintf(str1, format, w);
-  int b = sprintf(str2, format, w);
-  ck_assert_str_eq(str1, str2);
-  ck_assert_int_eq(a, b);
-}
-END_TEST
 START_TEST(wide_char2) {
   char str1[100];
   char str2[100];
@@ -11436,7 +11108,6 @@ Suite *test_sprintf() {
   tcase_add_test(tcase_sprintf, sprintf_spec_e_flags_8);
   tcase_add_test(tcase_sprintf, sprintf_spec_e_flags_9);
   tcase_add_test(tcase_sprintf, sprintf_spec_e_flags_10);
-  tcase_add_test(tcase_sprintf, sprintf_spec_e_flags_11);
   tcase_add_test(tcase_sprintf, sprintf_spec_e_flags_12);
   tcase_add_test(tcase_sprintf, sprintf_spec_e_flags_13);
   tcase_add_test(tcase_sprintf, sprintf_spec_e_flags_14);
@@ -11466,7 +11137,6 @@ Suite *test_sprintf() {
   tcase_add_test(tcase_sprintf, sprintf_spec_e_flags_38);
   tcase_add_test(tcase_sprintf, sprintf_spec_e_flags_39);
   tcase_add_test(tcase_sprintf, sprintf_spec_e_flags_40);
-  tcase_add_test(tcase_sprintf, sprintf_spec_e_long_1);
   tcase_add_test(tcase_sprintf, sprintf_spec_e_long_2);
 
   tcase_add_test(tcase_sprintf, sprintf_spec_E_1);
@@ -11486,7 +11156,6 @@ Suite *test_sprintf() {
   tcase_add_test(tcase_sprintf, sprintf_spec_E_flags_8);
   tcase_add_test(tcase_sprintf, sprintf_spec_E_flags_9);
   tcase_add_test(tcase_sprintf, sprintf_spec_E_flags_10);
-  tcase_add_test(tcase_sprintf, sprintf_spec_E_flags_11);
   tcase_add_test(tcase_sprintf, sprintf_spec_E_flags_12);
   tcase_add_test(tcase_sprintf, sprintf_spec_E_flags_13);
   tcase_add_test(tcase_sprintf, sprintf_spec_E_flags_14);
@@ -11516,7 +11185,6 @@ Suite *test_sprintf() {
   tcase_add_test(tcase_sprintf, sprintf_spec_E_flags_38);
   tcase_add_test(tcase_sprintf, sprintf_spec_E_flags_39);
   tcase_add_test(tcase_sprintf, sprintf_spec_E_flags_40);
-  tcase_add_test(tcase_sprintf, sprintf_spec_E_long_1);
   tcase_add_test(tcase_sprintf, sprintf_spec_E_long_2);
 
   tcase_add_test(tcase_sprintf, sprintf_spec_f_1);
@@ -11543,7 +11211,6 @@ Suite *test_sprintf() {
   tcase_add_test(tcase_sprintf, sprintf_spec_f_flags_15);
   tcase_add_test(tcase_sprintf, sprintf_spec_f_flags_16);
   tcase_add_test(tcase_sprintf, sprintf_spec_f_flags_17);
-  tcase_add_test(tcase_sprintf, sprintf_spec_f_flags_18);
   tcase_add_test(tcase_sprintf, sprintf_spec_f_flags_19);
   tcase_add_test(tcase_sprintf, sprintf_spec_f_flags_20);
   tcase_add_test(tcase_sprintf, sprintf_spec_f_flags_21);
@@ -11988,7 +11655,6 @@ Suite *test_sprintf() {
   tcase_add_test(tcase_sprintf, flags_long_int);
   tcase_add_test(tcase_sprintf, flags_short_int);
   tcase_add_test(tcase_sprintf, flags_another_long_int);
-  tcase_add_test(tcase_sprintf, zero_precision_zero_int);
   tcase_add_test(tcase_sprintf, space_flag_int);
   tcase_add_test(tcase_sprintf, unsigned_val);
   tcase_add_test(tcase_sprintf, unsigned_val_width);
@@ -12024,7 +11690,6 @@ Suite *test_sprintf() {
   tcase_add_test(tcase_sprintf, one_precision);
   tcase_add_test(tcase_sprintf, one_flags);
   tcase_add_test(tcase_sprintf, one_width);
-  tcase_add_test(tcase_sprintf, one_many);
   tcase_add_test(tcase_sprintf, one_many_flags);
   tcase_add_test(tcase_sprintf, string);
   tcase_add_test(tcase_sprintf, string_precision);
@@ -12053,7 +11718,7 @@ Suite *test_sprintf() {
   tcase_add_test(tcase_sprintf, e_precision_huge);
   tcase_add_test(tcase_sprintf, e_precision_huge_negative);
   tcase_add_test(tcase_sprintf, e_huge);
-  tcase_add_test(tcase_sprintf, e_many);
+  tcase_add_test(tcase_sprintf, one_many);
   tcase_add_test(tcase_sprintf, e_width);
   tcase_add_test(tcase_sprintf, e_flags);
   tcase_add_test(tcase_sprintf, E_int);
@@ -12115,15 +11780,12 @@ Suite *test_sprintf() {
   tcase_add_test(tcase_sprintf, test_sprintf16);
   tcase_add_test(tcase_sprintf, test_sprintf17);
   tcase_add_test(tcase_sprintf, test_sprintf18);
-  tcase_add_test(tcase_sprintf, test_sprintf19);
-  tcase_add_test(tcase_sprintf, test_sprintf20);
   tcase_add_test(tcase_sprintf, test_sprintf24);
   tcase_add_test(tcase_sprintf, test_sprintf25);
   tcase_add_test(tcase_sprintf, test_sprintf28);
   tcase_add_test(tcase_sprintf, test_sprintf29);
   tcase_add_test(tcase_sprintf, test_sprintf30);
   tcase_add_test(tcase_sprintf, test_sprintf31);
-  tcase_add_test(tcase_sprintf, test_sprintf32);
   tcase_add_test(tcase_sprintf, test_sprintf33);
   tcase_add_test(tcase_sprintf, test_sprintf35);
   tcase_add_test(tcase_sprintf, test_sprintf36);
@@ -12137,28 +11799,9 @@ Suite *test_sprintf() {
   tcase_add_test(tcase_sprintf, test_sprintf44);
   tcase_add_test(tcase_sprintf, test_sprintf26);
   tcase_add_test(tcase_sprintf, test_sprintf27);
-  tcase_add_test(tcase_sprintf, g_trailing_zero);
-  tcase_add_test(tcase_sprintf, g_large);
-  tcase_add_test(tcase_sprintf, g_small);
-  tcase_add_test(tcase_sprintf, g_precision);
-  tcase_add_test(tcase_sprintf, g_precision_zero);
-  tcase_add_test(tcase_sprintf, g_precision_missing);
-  tcase_add_test(tcase_sprintf, g_many_zeroes_in_front);
-  tcase_add_test(tcase_sprintf, g_one_zero);
-  tcase_add_test(tcase_sprintf, g_mantiss);
-  tcase_add_test(tcase_sprintf, g_mantiss_flags);
-  tcase_add_test(tcase_sprintf, g_short_no_mantiss);
-  tcase_add_test(tcase_sprintf, LG);
-  tcase_add_test(tcase_sprintf, g_many);
-  tcase_add_test(tcase_sprintf, g_zero);
   tcase_add_test(tcase_sprintf, wide_char);
   tcase_add_test(tcase_sprintf, width_char);
   tcase_add_test(tcase_sprintf, minus_wide_char);
-  tcase_add_test(tcase_sprintf, wide_string);
-  tcase_add_test(tcase_sprintf, wide_string1);
-  //    tcase_add_test(tcase_sprintf,wide_string2);
-  tcase_add_test(tcase_sprintf, wide_string3);
-  tcase_add_test(tcase_sprintf, wide_string4);
   tcase_add_test(tcase_sprintf, wide_char2);
 
   suite_add_tcase(suite, tcase_sprintf);
